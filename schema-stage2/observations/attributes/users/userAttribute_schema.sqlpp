@@ -15,7 +15,7 @@ CREATE TYPE UserAttributeType AS OPEN {
   events: [UUID]?,
   measurements: [UUID]?, --foreign keys to ids of observations which were used to make up this event
   -- The followings are used to describe emotion.
-  strengthen: double?,
+  strength: double?,
   valence: double?,
   arousal: double?,
   -- The followings are sleep and motion activities.
