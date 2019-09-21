@@ -1,13 +1,12 @@
-package personicle.datagen.nosqlcomp;
+package personicle.datagen.nosqlcomp.invertedindex;
 
 import asterix.recordV2.wrapper.DateTime;
-import asterix.recordV2.wrapper.Point;
 import asterix.recordV2.wrapper.Uuid;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
-public class FoodLog {
+public class IIFoodLog {
     private Uuid deviceId;
     private String userName;
     private String foodName;
@@ -23,10 +22,10 @@ public class FoodLog {
     // general attributes
     private Uuid measureId;
     private String category;
-    private DateTime startAt;  //startAt: datetime,    --start of event
+    private DateTime startAt;  //startAt: datetime, --start of event
     private DateTime endAt;
-            //endAt: datetime,      --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
-    private List<Uuid> attribute;
+    //endAt: datetime, --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
+    private String attribute;
     //    private String activity;            //name: string,
     private String description;
 
@@ -150,12 +149,17 @@ public class FoodLog {
         this.category = category;
     }
 
-    public List<Uuid> getAttribute() {
+    public String getAttribute() {
         return attribute;
     }
 
     public void setAttribute(List<Uuid> attribute) {
-        this.attribute = attribute;
+        this.attribute = new String();
+        for (Uuid uuid : attribute) {
+            this.attribute += uuid.getUuid().toString();
+            this.attribute += " ";
+        }
+        this.attribute = this.attribute.trim();
     }
 
     //    public String getActivity() {

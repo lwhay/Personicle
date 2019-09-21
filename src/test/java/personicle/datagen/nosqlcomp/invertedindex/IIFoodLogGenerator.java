@@ -1,17 +1,17 @@
-package personicle.datagen.nosqlcomp;
+package personicle.datagen.nosqlcomp.invertedindex;
 
-import asterix.recordV1.food.Food;
-import asterix.recordV2.events.PersonicleEvent;
 import asterix.recordV2.wrapper.DateTime;
-import asterix.recordV2.wrapper.Point;
 import asterix.recordV2.wrapper.Uuid;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
-public class FoodLogGenerator {
+public class IIFoodLogGenerator {
     private static int measureCount = 10000000;//0000;
 
     private static int deviceCount = 1000000;//0000;
@@ -87,7 +87,7 @@ public class FoodLogGenerator {
             }
             LocalDateTime begin = baseTime.plusSeconds(second);
             for (int i = 0; i < gran; i++) {
-                FoodLog foodLog = new FoodLog();
+                IIFoodLog foodLog = new IIFoodLog();
                 double x = minx + i * delx;
                 double y = miny + i * dely;
                 foodLog.setDeviceId(new Uuid(device));
@@ -106,10 +106,11 @@ public class FoodLogGenerator {
                 foodLog.setCategory("unknown");
                 foodLog.setDescription(
                         foodLog.getUserName() + " ate " + foodLog.getWeight() + "g " + foodLog.getFoodName());
-                foodLog.setAttribute(new ArrayList<>());
+                List<Uuid> attribute = new ArrayList<>();
                 for (int j = 0; j < attributePerEvent; j++) {
-                    foodLog.getAttribute().add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
+                    attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
                 }
+                foodLog.setAttribute(attribute);
                 //System.out.println(event.toJSONString());
                 bw.write(foodLog.toJSONString() + "\n");
             }

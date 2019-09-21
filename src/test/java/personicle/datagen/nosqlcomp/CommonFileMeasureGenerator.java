@@ -80,14 +80,15 @@ public class CommonFileMeasureGenerator {
                 commonFileMeasure.setDeviceId(new Uuid(device));
                 commonFileMeasure.setUserName(userName);
                 begin = begin.plusSeconds(2);
-//                System.out.println(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
+                //                System.out.println(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 commonFileMeasure.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 commonFileMeasure.setStartAt(new DateTime(begin));
                 commonFileMeasure.setEndAt(new DateTime(begin.plusSeconds(10)));
                 commonFileMeasure.setMeasureId(new Uuid(UUID.randomUUID()));
                 commonFileMeasure.setCategory("unknown");
                 commonFileMeasure.setFile_category(file_types.get(rand.nextInt(file_types.size())));
-                commonFileMeasure.setDescription(commonFileMeasure.getUserName() + " has " + commonFileMeasure.getFile_category() + " file ");
+                commonFileMeasure.setDescription(
+                        commonFileMeasure.getUserName() + " has " + commonFileMeasure.getFile_category() + " file ");
                 commonFileMeasure.setFilepath("---");
                 commonFileMeasure.setAttribute(new ArrayList<>());
                 for (int j = 0; j < attributePerEvent; j++) {

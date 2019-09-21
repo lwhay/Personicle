@@ -11,8 +11,15 @@ public class Uuid extends JSON {
         this.uuid = uuid;
     }
 
-    @Override
-    public String toJSONString() {
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override public String toJSONString() {
         return "uuid(\"" + uuid + "\")";
     }
 }

@@ -13,16 +13,15 @@ public class CommonFileMeasure {
     private Long timestamp;
     private String filepath;
     private String comments;
-// general attributes
+    // general attributes
     private Uuid measureId;
     private String category;
     private DateTime startAt;  //startAt: datetime,    --start of event
     private DateTime endAt;    //endAt: datetime,      --end of event using `` because of a potential AsterixDB bug
     private List<Uuid> attribute;
-//    private String activity;            //name: string,
+    //    private String activity;            //name: string,
     private String description;
     //level: bigint?,       --Jordan's paper referred to different levels of daily activities.
-
 
     public Uuid getDeviceId() {
         return deviceId;
