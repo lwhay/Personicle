@@ -156,7 +156,7 @@ public class IIFoodLog {
     public void setAttribute(List<Uuid> attribute) {
         this.attribute = new String();
         for (Uuid uuid : attribute) {
-            this.attribute += uuid.getUuid().toString();
+            this.attribute += uuid.getUuid().toString().replace("-", "");
             this.attribute += " ";
         }
         this.attribute = this.attribute.trim();
