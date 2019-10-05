@@ -5,7 +5,7 @@ DROP DATASET EmotionText IF EXISTS;
 DROP TYPE EmotionTextType IF EXISTS;
 
 CREATE TYPE EmotionTextType AS OPEN {
-  deviceId: string, --primary key string for user, will be changed to uuid later
+  deviceId: string,  --primary key string for user, will be changed to uuid later
   timestamp: bigint, --primary key timestamp for observation
   userName: string?,
   message: string,
