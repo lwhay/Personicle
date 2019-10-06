@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <cxf.version>3.3.1</cxf.version>
+        <cxf.version>2.2.3</cxf.version>
     </properties>
 
     <dependencies>
