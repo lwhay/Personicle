@@ -2,12 +2,12 @@ package personicle.webservice;
 
 import org.junit.Test;
 
-public class GlobalUUIDServiceTest {
+public class GlobalCXFServiceTest {
     @Test
     public void testUUIDGeneration() {
-        GlobalUUIDService localService = new GlobalUUIDService();
+        GlobalCXFService service = new GlobalCXFService();
         for (int i = 0; i < 256; i++) {
-            System.out.println(localService.getUUID());
+            System.out.println(service.getUUID());
         }
     }
 }
