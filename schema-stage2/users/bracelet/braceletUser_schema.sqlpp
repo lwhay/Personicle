@@ -22,4 +22,4 @@ CREATE TYPE BraceletUserType AS OPEN {
 };
 
 CREATE DATASET BraceletUser(BraceletUserType) PRIMARY KEY userId;
--- CREATE INDEX BraceletUserUIDIndex on BraceletUser(uniqueId) type btree;
+CREATE INDEX BraceletUserDeviceIdx ON BraceletUser(deviceIds) fulltext;
