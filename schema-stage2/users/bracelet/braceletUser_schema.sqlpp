@@ -5,7 +5,7 @@ DROP DATASET BraceletUser IF EXISTS;
 DROP TYPE BraceletUserType IF EXISTS;
 
 CREATE TYPE BraceletUserType AS OPEN {
-  userId: UUID,
+  userId: string,
   netId: int?,
   password: string?,
   token: string?,
@@ -17,9 +17,9 @@ CREATE TYPE BraceletUserType AS OPEN {
   target: int,          -- default (10000)
   status: string?,
   updateTime: string?,
-  deviceIds: [UUID]?,
+  deviceIds: [string]?,
   macs: [string]?
 };
 
 CREATE DATASET BraceletUser(BraceletUserType) PRIMARY KEY userId;
--- CREATE INDEX BraceletUserUIDIndex on BraceletUser(uniqueId) type btree;
+CREATE INDEX BraceletUserDeviceIdx ON BraceletUser(deviceIds) fulltext;

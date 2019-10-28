@@ -5,7 +5,7 @@ DROP DATASET BraceletDevice IF EXISTS;
 DROP TYPE BraceletDeviceType IF EXISTS;
 
 CREATE TYPE BraceletDeviceType AS OPEN {
-  deviceId: UUID, --guarantee identification in application, e.g., UUID
+  deviceId: string,             --guarantee identification in application, e.g., UUID
   netId: int?,
   userId: string?,
   userName: string?,

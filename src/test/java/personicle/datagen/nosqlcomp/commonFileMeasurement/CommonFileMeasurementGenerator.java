@@ -50,7 +50,7 @@ public class CommonFileMeasurementGenerator {
     }
 
     public static void Generator(int mc) throws IOException {
-        measureCount = mc*4;
+        measureCount = mc * 4;
         deviceCount = measureCount / gran;
 
         genUsers();

@@ -5,7 +5,7 @@ DROP DATASET FoodLog IF EXISTS;
 DROP TYPE FoodLogType IF EXISTS;
 
 CREATE TYPE FoodLogType AS OPEN {
-  deviceId: UUID,  --primary key string for user, will be changed to uuid later
+  deviceId: string,  --primary key string for user, will be changed to uuid later
   timestamp: bigint, --primary key timestamp for observation
   userName: string?,
   foodName: string,
