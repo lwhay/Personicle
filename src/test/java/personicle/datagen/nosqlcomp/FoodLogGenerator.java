@@ -12,13 +12,13 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 public class FoodLogGenerator {
-    private static int measureCount = 100000;//0000;
+    private static int measureCount = 10000000;//0000;
 
-    private static int deviceCount = 10000;//0000;
+    private static int deviceCount = 1000000;//0000;
 
     private static final int subEventPer = 10;
 
-    private static int informationCount = 10000;//00000;
+    private static int informationCount = 1000000;//00000;
 
     private static final int attributePerEvent = 5;
 
