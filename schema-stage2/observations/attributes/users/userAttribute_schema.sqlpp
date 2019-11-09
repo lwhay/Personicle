@@ -12,8 +12,8 @@ CREATE TYPE UserAttributeType AS OPEN {
   beginAt: datetime,
   endAt: datetime,
   category: string,
-  events: [string]?,
-  measurements: [string]?, --foreign keys to ids of observations which were used to make up this event
+  events: string?,
+  measurements: string?, --foreign keys to ids of observations which were used to make up this event
   -- The followings are used to describe emotion.
   strength: double?,
   valence: double?,

@@ -26,7 +26,7 @@ public class FoodLog {
     private DateTime startAt;  //startAt: datetime,    --start of event
     private DateTime endAt;
     //endAt: datetime,      --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
-    private List<String> attribute;
+    private String attribute;
     //    private String activity;            //name: string,
     private String description;
 
@@ -150,12 +150,17 @@ public class FoodLog {
         this.category = category;
     }
 
-    public List<String> getAttribute() {
+    public String getAttribute() {
         return attribute;
     }
 
     public void setAttribute(List<String> attribute) {
-        this.attribute = attribute;
+        this.attribute = new String();
+        for (String string : attribute) {
+            this.attribute += string;
+            this.attribute += " ";
+        }
+        this.attribute = this.attribute.trim();
     }
 
     //    public String getActivity() {

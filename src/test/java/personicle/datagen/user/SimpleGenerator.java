@@ -18,7 +18,7 @@ public class SimpleGenerator {
 
     private static final String geopath = "./resources/geobasis/pcas-code.json";
 
-    private static final String[] emailcategory = { "家庭", "工作", "临时" };
+    private static final String[] emailcategory = {"家庭", "工作", "临时"};
 
     public static class GeoEntitity {
         private String code;

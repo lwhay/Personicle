@@ -95,7 +95,7 @@ public class EmotionECGGenerator {
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
                 BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
-                BigLog.setCategory("unknown");
+                BigLog.setCategory("emotionECG");
                 BigLog.setDescription("userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: " + BigLog.getMeasureId());
                 List<Uuid> attribute = new ArrayList<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {

@@ -103,7 +103,7 @@ public class IIFoodLogGenerator {
                 foodLog.setLatitude(y);
                 foodLog.setPreference_star(randomnum.nextInt(10));
                 foodLog.setMeasureId(new Uuid(UUID.randomUUID()));
-                foodLog.setCategory("unknown");
+                foodLog.setCategory("IIfoodlog");
                 foodLog.setDescription(
                         foodLog.getUserName() + " ate " + foodLog.getWeight() + "g " + foodLog.getFoodName());
                 List<Uuid> attribute = new ArrayList<>();

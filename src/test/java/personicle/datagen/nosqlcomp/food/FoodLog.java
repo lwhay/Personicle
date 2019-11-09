@@ -10,7 +10,7 @@ public class FoodLog extends GeneralMeasurement {
     private Double weight;
     private Double total_calories;
     private List<Uuid> subEvents;   //subEvents: [uuid],    --sub events of event
-//    private Point location;         //location: point?,     --location of event
+    //    private Point location;         //location: point?,     --location of event
     private Double latitude;
     private Double longitude;
     private Integer preference_star;
@@ -83,7 +83,6 @@ public class FoodLog extends GeneralMeasurement {
     public void setComments(String comments) {
         this.comments = comments;
     }
-
 //    public String getActivity() {
 //        return activity;
 //    }

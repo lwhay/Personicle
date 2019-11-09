@@ -105,6 +105,15 @@ public class GeneralMeasurement {
         this.attribute = this.attribute.trim();
     }
 
+    public void setFoodAttribute(List<String> attribute) {
+        this.attribute = new String();
+        for (String string : attribute) {
+            this.attribute += string;
+            this.attribute += " ";
+        }
+        this.attribute = this.attribute.trim();
+    }
+
 //    public String getActivity() {
 //        return activity;
 //    }

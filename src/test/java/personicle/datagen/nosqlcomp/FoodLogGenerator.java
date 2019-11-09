@@ -5,6 +5,7 @@ import asterix.recordV2.events.PersonicleEvent;
 import asterix.recordV2.wrapper.DateTime;
 import asterix.recordV2.wrapper.Point;
 import asterix.recordV2.wrapper.Uuid;
+import personicle.datagen.nosqlcomp.userattribute.UserAttributeGenerator;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -12,13 +13,13 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 public class FoodLogGenerator {
-    private static int measureCount = 10000000;//0000;
+    private static int measureCount = 1000;//0000;
 
-    private static int deviceCount = 1000000;//0000;
+    private static int deviceCount = 100;//0000;
 
     private static final int subEventPer = 10;
 
-    private static int informationCount = 1000000;//00000;
+    private static int informationCount = 100;//00000;
 
     private static final int attributePerEvent = 5;
 
@@ -37,6 +38,8 @@ public class FoodLogGenerator {
     private static Random randomnum = new Random();
 
     private static Random randompos = new Random();
+
+    private static Random randattri = new Random();
 
     private static LocalDateTime baseTime = LocalDateTime.of(2017, 01, 01, 0, 0, 0, 0);
 
@@ -63,6 +66,8 @@ public class FoodLogGenerator {
             gran = measureCount / deviceCount;
         }
         genFoodsAndUsers();
+        //HashMap<Integer, String> hashMap = UserAttributeGenerator.Generator(informationCount);
+       // int hashSize = hashMap.size();
         List<UUID> deviceSet = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
@@ -108,10 +113,12 @@ public class FoodLogGenerator {
                         foodLog.getUserName() + " ate " + foodLog.getWeight() + "g " + foodLog.getFoodName());
                 foodLog.setComments(
                         foodLog.getUserName() + " ate " + foodLog.getWeight() + "g " + foodLog.getFoodName());
-                foodLog.setAttribute(new ArrayList<>());
+                List<String> attribute = new ArrayList<>();
                 for (int j = 0; j < attributePerEvent; j++) {
-                    foodLog.getAttribute().add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))).getUuid().toString().replace("-", "").trim());
+                    //attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
+                   // attribute.add(hashMap.get(randattri.nextInt(hashMap.size())));
                 }
+                foodLog.setAttribute(attribute);
                 //System.out.println(event.toJSONString());
                 bw.write(foodLog.toJSONString() + "\n");
             }

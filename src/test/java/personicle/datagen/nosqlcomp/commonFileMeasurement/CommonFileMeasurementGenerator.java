@@ -89,7 +89,7 @@ public class CommonFileMeasurementGenerator {
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
                 BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
-                BigLog.setCategory("unknown");
+                BigLog.setCategory("commonFileMeasurement");
                 BigLog.setFile_category(file_types.get(rand.nextInt(file_types.size())));
                 BigLog.setDescription(BigLog.getUserName() + " has " + BigLog.getFile_category() + " file ");
                 BigLog.setComments(BigLog.getDescription());
