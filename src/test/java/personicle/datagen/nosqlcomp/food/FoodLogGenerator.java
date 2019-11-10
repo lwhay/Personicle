@@ -70,7 +70,7 @@ public class FoodLogGenerator {
         BufferedReader b = new BufferedReader(new FileReader("./pseudo_users.adm"));
         String line;
         while ((line = b.readLine()) != null) {
-            JSONObject pa=JSONObject.parseObject(line);
+            JSONObject pa = JSONObject.parseObject(line);
             userIds.add(pa.getString("userId"));
             userNames.add(pa.getString("userName"));
         }
@@ -81,7 +81,7 @@ public class FoodLogGenerator {
         BufferedReader bq = new BufferedReader(new FileReader("./example/AttributeAloneLog.adm"));
         String line;
         while ((line = bq.readLine()) != null) {
-            JSONObject pb=JSONObject.parseObject(line);
+            JSONObject pb = JSONObject.parseObject(line);
             userAttributes.add(pb.getString("attributeId"));
             userAtIds.add(pb.getString("userId"));
             userAtNames.add(pb.getString("userName"));
@@ -90,7 +90,10 @@ public class FoodLogGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        Generator(1000000);
+        if (args.length > 1)
+            measureCount = Integer.parseInt(args[1]);
+        informationCount = measureCount / 10;
+        Generator(measureCount);
     }
 
     public static void Generator(int mc) throws IOException {
@@ -104,21 +107,21 @@ public class FoodLogGenerator {
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
         }
-        HashMap<String,List<String>> hashMap=UserAttributeGenerator.Generator(100000);
+        HashMap<String, List<String>> hashMap = UserAttributeGenerator.Generator(informationCount);
 // GeneralMeasurement
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigFoodLog.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/FoodLog_alone.adm"));
         BufferedWriter bw3 = new BufferedWriter(new FileWriter("./example/FoodLog_general.adm"));
         BufferedWriter bw4 = new BufferedWriter(new FileWriter("./example/FoodAttribute.adm"));
-        JSONArray jsonArray=new JSONArray();
+        JSONArray jsonArray = new JSONArray();
         for (UUID device : deviceSet) {
-            int u=rand.nextInt(userIds.size());
+            int u = rand.nextInt(userIds.size());
             String userId = userIds.get(u);
-            String userName=userNames.get(u);
+            String userName = userNames.get(u);
             //String userId=userAtIds.get(rand.nextInt(userAtIds.size()));
             List<String> AttriSet = new ArrayList<>();
-            AttriSet=hashMap.get(userId);
+            AttriSet = hashMap.get(userId);
             double minx = minX + rand.nextDouble() * 0.5;
             double maxx = maxX + rand.nextDouble() * 0.25;
             double miny = minY + rand.nextDouble() * 0.5;
@@ -152,12 +155,12 @@ public class FoodLogGenerator {
                 BigLog.setComments(BigLog.getDescription());
                 List<String> attribute = new ArrayList<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
-                    String a=AttriSet.get(rand.nextInt(AttriSet.size()));
-                   // String a=hashMap.get(randattri.nextInt(hashMap.size()));
+                    String a = AttriSet.get(rand.nextInt(AttriSet.size()));
+                    // String a=hashMap.get(randattri.nextInt(hashMap.size()));
                     attribute.add(a);
-                    JSONObject jsonObject=new JSONObject();
-                    jsonObject.put("attributeId",a);
-                    jsonObject.put("deviceId",BigLog.getDeviceId());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("attributeId", a);
+                    jsonObject.put("deviceId", BigLog.getDeviceId());
                     bw4.write(jsonObject + "\n");
                 }
                 BigLog.setFoodAttribute(attribute);
