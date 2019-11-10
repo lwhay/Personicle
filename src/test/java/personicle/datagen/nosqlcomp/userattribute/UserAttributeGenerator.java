@@ -59,8 +59,8 @@ public class UserAttributeGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length > 1)
-            total_attribute = Integer.parseInt(args[1]);
+        if (args.length > 0)
+            total_attribute = Integer.parseInt(args[0]);
         // HashMap<Integer, String> h = Generator(100);
         // HashMap<String,List<String>> hashMap = new HashMap<>();
         HashMap<String, List<String>> hashMap = Generator(total_attribute);

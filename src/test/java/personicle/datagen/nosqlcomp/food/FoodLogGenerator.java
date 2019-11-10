@@ -90,8 +90,8 @@ public class FoodLogGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length > 1)
-            measureCount = Integer.parseInt(args[1]);
+        if (args.length > 0)
+            measureCount = Integer.parseInt(args[0]);
         informationCount = measureCount / 10;
         Generator(measureCount);
     }
