@@ -107,7 +107,7 @@ public class FoodLogGenerator {
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
         }
-        HashMap<String, List<String>> hashMap = UserAttributeGenerator.Generator(informationCount);
+        HashMap<String, List<String>> userAttributeMap = UserAttributeGenerator.Generator(informationCount);
 // GeneralMeasurement
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigFoodLog.adm"));
@@ -120,8 +120,13 @@ public class FoodLogGenerator {
             String userId = userIds.get(u);
             String userName = userNames.get(u);
             //String userId=userAtIds.get(rand.nextInt(userAtIds.size()));
-            List<String> AttriSet = new ArrayList<>();
-            AttriSet = hashMap.get(userId);
+            List<String> userAttributeSet = new ArrayList<>();
+            while (!userAttributeMap.containsKey(userId)) {
+                u = rand.nextInt(userIds.size());
+                userId = userIds.get(u);
+                userName = userNames.get(u);
+            }
+            userAttributeSet = userAttributeMap.get(userId);
             double minx = minX + rand.nextDouble() * 0.5;
             double maxx = maxX + rand.nextDouble() * 0.25;
             double miny = minY + rand.nextDouble() * 0.5;
@@ -155,8 +160,8 @@ public class FoodLogGenerator {
                 BigLog.setComments(BigLog.getDescription());
                 List<String> attribute = new ArrayList<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
-                    String a = AttriSet.get(rand.nextInt(AttriSet.size()));
-                    // String a=hashMap.get(randattri.nextInt(hashMap.size()));
+                    String a = userAttributeSet.get(rand.nextInt(userAttributeSet.size()));
+                    // String a=userAttributeMap.get(randattri.nextInt(userAttributeMap.size()));
                     attribute.add(a);
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("attributeId", a);

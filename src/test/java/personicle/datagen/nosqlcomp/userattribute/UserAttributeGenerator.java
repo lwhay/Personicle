@@ -62,15 +62,15 @@ public class UserAttributeGenerator {
         if (args.length > 0)
             total_attribute = Integer.parseInt(args[0]);
         // HashMap<Integer, String> h = Generator(100);
-        // HashMap<String,List<String>> hashMap = new HashMap<>();
-        HashMap<String, List<String>> hashMap = Generator(total_attribute);
-        List<String> a = hashMap.get(userIds.get(rand.nextInt(userIds.size())));
+        // HashMap<String,List<String>> userAttributeMap = new HashMap<>();
+        HashMap<String, List<String>> userAttributeMap = Generator(total_attribute);
+        List<String> a = userAttributeMap.get(userIds.get(rand.nextInt(userIds.size())));
         System.out.println(a.size());
         //genUsers();
     }
 
     public static HashMap<String, List<String>> Generator(int mc) throws IOException {
-        HashMap<String, List<String>> hashMap = new HashMap<>();
+        HashMap<String, List<String>> userAttributeMap = new HashMap<>();
 
         genFoodsAndUsers();
         genUsers();
@@ -128,14 +128,14 @@ public class UserAttributeGenerator {
             //System.out.println(event.toJSONString());
             // GeneralMeasurement gm = new GeneralMeasurement(BigLog);
             bw1.write(AtLog.toJSONString() + "\n");
-            //hashMap.put(j, AtLog.getAttributeId());
-            //hashMap.get()
-            if (hashMap.get(AtLog.getUserId()) == null) {
+            //userAttributeMap.put(j, AtLog.getAttributeId());
+            //userAttributeMap.get()
+            if (userAttributeMap.get(AtLog.getUserId()) == null) {
                 List<String> a = new ArrayList();
                 a.add(AtLog.getAttributeId());
-                hashMap.put(AtLog.getUserId(), a);
+                userAttributeMap.put(AtLog.getUserId(), a);
             } else {
-                hashMap.get(AtLog.getUserId()).add(AtLog.getAttributeId());
+                userAttributeMap.get(AtLog.getUserId()).add(AtLog.getAttributeId());
             }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("attributeId", AtLog.getAttributeId());
@@ -148,6 +148,6 @@ public class UserAttributeGenerator {
         bw1.close();
         bw2.flush();
         bw2.close();
-        return hashMap;
+        return userAttributeMap;
     }
 }
