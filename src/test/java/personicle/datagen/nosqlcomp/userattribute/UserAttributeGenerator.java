@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.HashMap;
 
 public class UserAttributeGenerator {
+    private static int total_attribute = 10000;
     private static Random rand = new Random();
 
     private static Random randomnum = new Random();
@@ -47,7 +48,7 @@ public class UserAttributeGenerator {
         String line;
         while ((line = b.readLine()) != null) {
             //JSONObject jo = JSONObject.fromObject(line);
-            JSONObject pa=JSONObject.parseObject(line);
+            JSONObject pa = JSONObject.parseObject(line);
             userIds.add(pa.getString("userId"));
             userNames.add(pa.getString("userName"));
             //String[] fields = line.split(",");
@@ -58,16 +59,18 @@ public class UserAttributeGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-       // HashMap<Integer, String> h = Generator(100);
-       // HashMap<String,List<String>> hashMap = new HashMap<>();
-        HashMap<String,List<String>> hashMap = Generator(100);
-        List<String>a=hashMap.get(userIds.get(rand.nextInt(userIds.size())));
-            System.out.println(a.size());
+        if (args.length > 1)
+            total_attribute = Integer.parseInt(args[1]);
+        // HashMap<Integer, String> h = Generator(100);
+        // HashMap<String,List<String>> hashMap = new HashMap<>();
+        HashMap<String, List<String>> hashMap = Generator(total_attribute);
+        List<String> a = hashMap.get(userIds.get(rand.nextInt(userIds.size())));
+        System.out.println(a.size());
         //genUsers();
     }
 
-    public static HashMap<String,List<String> >Generator(int mc) throws IOException {
-        HashMap<String,List<String>> hashMap = new HashMap<>();
+    public static HashMap<String, List<String>> Generator(int mc) throws IOException {
+        HashMap<String, List<String>> hashMap = new HashMap<>();
 
         genFoodsAndUsers();
         genUsers();
@@ -80,13 +83,13 @@ public class UserAttributeGenerator {
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/AttributeLog.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/AttributeAloneLog.adm"));
-        String userName,userId;
-        int j=0,u;
+        String userName, userId;
+        int j = 0, u;
         //u=rand.nextInt(userNames.size());
         for (UUID attribute : AttriSet) {
-            u=rand.nextInt(userIds.size());
-            userId=userIds.get(u);
-            userName=userNames.get(u);
+            u = rand.nextInt(userIds.size());
+            userId = userIds.get(u);
+            userName = userNames.get(u);
             int second = rand.nextInt(2 * 365 * 24 * 60 * 60);
             if (second % 2 == 0) {
                 second++;
@@ -103,13 +106,13 @@ public class UserAttributeGenerator {
             AtLog.setEndAt(new DateTime(begin.plusSeconds(10)));
             AtLog.setEvents("event");
             AtLog.setMeasurements("unknown");
-            if (j % 4 == 0){
+            if (j % 4 == 0) {
                 AtLog.setCategory("emotion");
-            } else if (j % 4 == 1){
+            } else if (j % 4 == 1) {
                 AtLog.setCategory("behavior");
-            } else if (j % 4 == 2){
+            } else if (j % 4 == 2) {
                 AtLog.setCategory("food");
-            }else {
+            } else {
                 AtLog.setCategory("others");
             }
 
@@ -127,18 +130,17 @@ public class UserAttributeGenerator {
             bw1.write(AtLog.toJSONString() + "\n");
             //hashMap.put(j, AtLog.getAttributeId());
             //hashMap.get()
-            if(hashMap.get(AtLog.getUserId())==null){
+            if (hashMap.get(AtLog.getUserId()) == null) {
                 List<String> a = new ArrayList();
                 a.add(AtLog.getAttributeId());
-                hashMap.put(AtLog.getUserId(),a);
-            }
-            else {
+                hashMap.put(AtLog.getUserId(), a);
+            } else {
                 hashMap.get(AtLog.getUserId()).add(AtLog.getAttributeId());
             }
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("attributeId",AtLog.getAttributeId());
-            jsonObject.put("userName",AtLog.getUserName());
-            jsonObject.put("userId",AtLog.getUserId());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("attributeId", AtLog.getAttributeId());
+            jsonObject.put("userName", AtLog.getUserName());
+            jsonObject.put("userId", AtLog.getUserId());
             bw2.write(jsonObject + "\n");
             //     }
         }
