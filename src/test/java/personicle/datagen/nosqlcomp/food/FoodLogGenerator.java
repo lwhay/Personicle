@@ -158,7 +158,7 @@ public class FoodLogGenerator {
                 BigLog.setCategory("foodlog");
                 BigLog.setDescription(BigLog.getUserName() + " ate " + BigLog.getWeight() + "g " + BigLog.getFoodName());
                 BigLog.setComments(BigLog.getDescription());
-                List<String> attribute = new ArrayList<>();
+                Set<String> attribute = new HashSet<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
                     String a = userAttributeSet.get(rand.nextInt(userAttributeSet.size()));
                     // String a=userAttributeMap.get(randattri.nextInt(userAttributeMap.size()));
@@ -168,7 +168,8 @@ public class FoodLogGenerator {
                     jsonObject.put("measureId", BigLog.getMeasureId());
                     bw4.write(jsonObject + "\n");
                 }
-                BigLog.setFoodAttribute(attribute);
+                List<String> alist = new ArrayList<>(attribute);
+                BigLog.setFoodAttribute(alist);
                 //System.out.println(event.toJSONString());
                 GeneralMeasurement gm = new GeneralMeasurement(BigLog);
                 FoodLogAlone alone = new FoodLogAlone(BigLog);
