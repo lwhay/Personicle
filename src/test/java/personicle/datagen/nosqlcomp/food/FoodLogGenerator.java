@@ -165,7 +165,7 @@ public class FoodLogGenerator {
                     attribute.add(a);
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("attributeId", a);
-                    jsonObject.put("deviceId", BigLog.getDeviceId());
+                    jsonObject.put("measureId", BigLog.getMeasureId());
                     bw4.write(jsonObject + "\n");
                 }
                 BigLog.setFoodAttribute(attribute);
