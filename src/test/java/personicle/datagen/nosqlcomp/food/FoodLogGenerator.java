@@ -163,12 +163,14 @@ public class FoodLogGenerator {
                     String a = userAttributeSet.get(rand.nextInt(userAttributeSet.size()));
                     // String a=userAttributeMap.get(randattri.nextInt(userAttributeMap.size()));
                     attribute.add(a);
+                }
+                List<String> alist = new ArrayList<>(attribute);
+                for (String a : alist) {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("attributeId", a);
                     jsonObject.put("measureId", BigLog.getMeasureId());
                     bw4.write(jsonObject + "\n");
                 }
-                List<String> alist = new ArrayList<>(attribute);
                 BigLog.setFoodAttribute(alist);
                 //System.out.println(event.toJSONString());
                 GeneralMeasurement gm = new GeneralMeasurement(BigLog);
