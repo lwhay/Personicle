@@ -1,0 +1,93 @@
+USE Personicle;
+
+DROP DATASET UserAttribute IF EXISTS;
+
+DROP TYPE UserAttributeType IF EXISTS;
+
+CREATE TYPE UserAttributeType AS OPEN {
+  attributeId: string,     --primary key string for attribute of a user
+  userId: string,
+  timestamp: bigint,
+  userName: string?,
+  beginAt: datetime,
+  endAt: datetime,
+  category: string,
+  events: string?,
+  measurements: string?, --foreign keys to ids of observations which were used to make up this event
+  -- The followings are used to describe emotion.
+  strength: double?,
+  valence: double?,
+  arousal: double?,
+  -- The followings are sleep and motion activities.
+  confidence: double?,
+  degree: double?
+};
+
+CREATE DATASET UserAttribute(UserAttributeType) PRIMARY KEY attributeId;
+CREATE INDEX UserAttributeUserIdIdx on UserAttribute(userId) TYPE btree;
+CREATE INDEX UserAttributeMeasurementIdx ON UserAttribute(measurements) type fulltext;
+CREATE INDEX UserAttributeEventIdx ON UserAttribute(events) type fulltext;
+
+use Personicle;
+load dataset UserAttribute using localfs
+(("path"="127.0.0.1:///kolla/asterixdb/Work/Personicle/example/AttributeLog.adm"),("format"="adm"));
+
+DROP DATASET AttributeMeasurement IF EXISTS;
+
+DROP TYPE AttributeMeasurementType IF EXISTS;
+
+CREATE TYPE AttributeMeasurementType AS OPEN {
+  attributeId: string,
+  measureId: string
+};
+CREATE DATASET AttributeMeasurement(AttributeMeasurementType) PRIMARY KEY attributeId, measureId;
+CREATE INDEX MeasureAttributeIdx on AttributeMeasurement(measureId, attributeId) TYPE btree;
+load dataset AttributeMeasurement using localfs
+(("path"="127.0.0.1:///kolla/asterixdb/Work/Personicle/example/FoodAttribute.adm"),("format"="adm"));
+
+
+
+USE Personicle;
+
+DROP DATASET GeneralMeasurement IF EXISTS;
+
+DROP TYPE GeneralMeasurementType IF EXISTS;
+
+CREATE TYPE GeneralMeasurementType AS OPEN {
+  measureId: string,  --primary key string for measurement, UUID
+  deviceId: string,
+  timestamp: bigint,
+  userName: string?,
+  beginAt: datetime?,
+  endAt: datetime?,
+  category: string,
+  attribute: string?,
+  activity: string?,
+  description: string?
+};
+
+CREATE DATASET GeneralMeasurement(GeneralMeasurementType) PRIMARY KEY measureId;
+CREATE INDEX GeneralMeasurementDeviceIdIdx ON GeneralMeasurement(deviceId, timestamp) type btree;
+CREATE INDEX GeneralMeasurementAttributeIdx ON GeneralMeasurement(attribute) type fulltext;
+load dataset GeneralMeasurement using localfs
+(("path"="127.0.0.1:///kolla/asterixdb/Work/Personicle/example/BigFoodLog.adm"),("format"="adm"));
+
+USE Personicle;
+select UA.userId, AM.attributeId, AM.measureId, GM.category
+from UserAttribute UA, AttributeMeasurement AM, GeneralMeasurement GM
+where UA.userId = "7de935090b8e4bfb817aae85536a2bfb"
+and UA.attributeId = AM.attributeId
+and AM.measureId = GM.measureId;
+
+use Personicle;
+set `simthreshold` `0.01`;
+select UA.userId, UA.attributeId, GM.measureId, GM.category
+from UserAttribute UA, GeneralMeasurement GM
+where UA.userId = "7de935090b8e4bfb817aae85536a2bfb"
+and `work-tokens`(GM.attribute) /* +indexnl */ ~= `word-tokens`(UA.attributeId);
+
+use Personicle;
+select UA.userId, UA.attributeId, GM.measureId, GM.category
+from UserAttribute UA, GeneralMeasurement GM
+where UA.userId = "7de935090b8e4bfb817aae85536a2bfb"
+and ftcontains(GM.attribute, `word-tokens`(UA.attributeId), {"mode":"any"});
