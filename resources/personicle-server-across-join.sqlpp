@@ -84,7 +84,7 @@ set `simthreshold` `0.01`;
 select UA.userId, UA.attributeId, GM.measureId, GM.category
 from UserAttribute UA, GeneralMeasurement GM
 where UA.userId = "7de935090b8e4bfb817aae85536a2bfb"
-and `work-tokens`(GM.attribute) /* +indexnl */ ~= `word-tokens`(UA.attributeId);
+and `word-tokens`(GM.attribute) /* +indexnl */ ~= `word-tokens`(UA.attributeId);
 
 use Personicle;
 select UA.userId, UA.attributeId, GM.measureId, GM.category
