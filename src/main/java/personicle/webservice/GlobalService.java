@@ -11,20 +11,25 @@ import javax.xml.ws.Endpoint;
 import java.net.SocketException;
 
 import org.apache.log4j.Logger;
+import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory;
 
-@WebService
-public class GlobalService {
+@WebService public class GlobalService {
     private static Logger LOGGER = Logger.getLogger(GlobalService.class);
 
     TimeBasedGenerator nbg = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
+
+    private final GlobalDirectory globalDirectory = new GlobalDirectory();
 
     public String getUUID() {
         return nbg.generate().toString().replace("-", "").trim();
     }
 
-
     private String getGeoCode(Point point) {
         return null;
+    }
+
+    public String getGlobalDirectory() {
+        return globalDirectory.getInformation();
     }
 
     public String getGeoCode(float x, float y) {
