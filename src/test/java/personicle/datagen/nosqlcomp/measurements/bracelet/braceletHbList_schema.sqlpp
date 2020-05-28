@@ -1,0 +1,23 @@
+USE Personicle;
+
+DROP DATASET BraceletHbList IF EXISTS;
+
+DROP TYPE BraceletHbListType IF EXISTS;
+
+CREATE TYPE BraceletHbListType AS OPEN {
+  deviceId: UUID,
+  timestamp: bigint,
+  netId: int?,
+  userName: string?,
+  mac: string?,
+  dbp: int,          -- default (0)
+  sbp: int,          -- default (0)
+  heartRate: int,    -- default (0)
+  dateString: string?,
+  status: string?,
+  createTime: bigint?,
+  updateTime: bigint?
+};
+
+CREATE DATASET BraceletHbList(BraceletHbListType) PRIMARY KEY deviceId, timestamp;
+--CREATE INDEX BraceletHbListMacIdx ON BraceletHbList(mac) TYPE btree;

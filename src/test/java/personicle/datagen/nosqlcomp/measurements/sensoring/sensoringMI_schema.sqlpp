@@ -1,0 +1,17 @@
+USE Personicle;
+
+DROP DATASET SensoringMI IF EXISTS;
+
+DROP TYPE SensoringMIType IF EXISTS;
+
+CREATE TYPE SensoringMIType AS OPEN {
+  deviceId: UUID,  --primary key string for user, will be changed to uuid later
+  timestamp: bigint, --primary key timestamp for observation
+  userName: string?,
+  heartrate: int,
+  stepcount: int,
+  comments: string
+};
+
+CREATE DATASET SensoringMI(SensoringMIType) PRIMARY KEY deviceId, timestamp;
+-- CREATE INDEX SensoringMIUserIdIdx on SensoringMI(deviceId) type btree;

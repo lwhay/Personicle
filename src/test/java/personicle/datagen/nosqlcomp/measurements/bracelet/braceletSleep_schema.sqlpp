@@ -5,7 +5,7 @@ DROP DATASET BraceletSleep IF EXISTS;
 DROP TYPE BraceletSleepType IF EXISTS;
 
 CREATE TYPE BraceletSleepType AS OPEN {
-  deviceId: string,
+  deviceId: UUID,
   timestamp: bigint,
   netId: int?,
   userName: string?,

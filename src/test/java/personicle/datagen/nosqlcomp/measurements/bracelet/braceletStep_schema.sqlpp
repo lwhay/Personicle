@@ -5,7 +5,7 @@ DROP DATASET BraceletStep IF EXISTS;
 DROP TYPE BraceletStepType IF EXISTS;
 
 CREATE TYPE BraceletStepType AS OPEN {
-  deviceId: string,
+  deviceId: UUID,
   timestamp: bigint,
   netId: int?,
   userName: string?,

@@ -5,8 +5,8 @@ DROP DATASET GeneralMeasurement IF EXISTS;
 DROP TYPE GeneralMeasurementType IF EXISTS;
 
 CREATE TYPE GeneralMeasurementType AS OPEN {
-  measureId: string,  --primary key string for measurement, UUID
-  deviceId: string,
+  measureId: UUID,  --primary key string for measurement, UUID
+  deviceId: UUID,
   timestamp: bigint,
   userName: string?,
   beginAt: datetime?,

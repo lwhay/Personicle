@@ -1,0 +1,16 @@
+USE Personicle;
+
+DROP DATASET SensoringSoftInfo IF EXISTS;
+
+DROP TYPE SensoringSoftInfoType IF EXISTS;
+
+CREATE TYPE SensoringSoftInfoType AS OPEN {
+  deviceId: UUID,  --primary key string for user, will be changed to uuid later
+  timestamp: bigint, --primary key timestamp for observation
+  userName: string?,
+  softinfo: string,
+  comments: string
+};
+
+CREATE DATASET SensoringSoftInfo(SensoringSoftInfoType) PRIMARY KEY deviceId, timestamp;
+-- CREATE INDEX SensoringSoftInfoUserIdIdx on SensoringSoftInfo(deviceId) type btree;

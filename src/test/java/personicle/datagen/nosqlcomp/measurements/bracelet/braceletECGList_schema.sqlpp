@@ -1,0 +1,32 @@
+USE Personicle;
+
+DROP DATASET BraceletECGList IF EXISTS;
+
+DROP TYPE BraceletECGListType IF EXISTS;
+
+CREATE TYPE BraceletECGListType AS OPEN {
+  deviceId: UUID,
+  timestamp: bigint,
+  id: UUID,
+  netId: int?,
+  userName: string?,
+  mac: string?,
+  ecg: int,          -- default (0)
+  isTouched: int,    -- default (0)
+  hr: int,           -- default (0)
+  mood: int,         -- default (0)
+  resp: int,         -- default (0)
+  stress: int,       -- default (0)
+  hrv: int,          -- default (0)
+  heartage: int,     -- default (0)
+  lfhf: int,         -- default (0)
+  count: int,        -- default (0)
+  ecgDetailUrl: string?,
+  dateString: string?,
+  status: string?,
+  createTime: bigint?,
+  updateTime: bigint?
+};
+
+CREATE DATASET BraceletECGList(BraceletECGListType) PRIMARY KEY deviceId, timestamp;
+--CREATE INDEX BraceletECGListMacIdx ON BraceletECGList(mac) TYPE btree;

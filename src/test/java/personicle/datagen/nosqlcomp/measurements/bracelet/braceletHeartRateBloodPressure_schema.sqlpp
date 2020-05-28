@@ -1,0 +1,31 @@
+USE Personicle;
+
+DROP DATASET BraceletDailyHeartRateBloodPressure IF EXISTS;
+
+DROP TYPE BraceletDailyHeartRateBloodPressureType IF EXISTS;
+
+CREATE TYPE BraceletDailyHeartRateBloodPressureType AS OPEN {
+  deviceId: UUID,
+  timestamp: bigint,
+  netId: int?,
+  userName: string?,
+  mac: string?,
+  mainSec: int,      -- default (0)
+  mainDate: int,     -- default (0)
+  hour: int,         -- default (0)
+  min: int,          -- default (0)
+  sec: int,          -- default (0)
+  hrm: int,          -- default (0)
+  sbp: int,          -- default (0)
+  dbp: int,          -- default (0)
+  spo2: int,         -- default (0)
+  fatigue: int,      -- default (0)
+  rsv3: int,         -- default (0)
+  dateString: string?,
+  status: string?,
+  createTime: bigint?,
+  updateTime: bigint?
+};
+
+CREATE DATASET BraceletDailyHeartRateBloodPressure(BraceletDailyHeartRateBloodPressureType) PRIMARY KEY  deviceId, timestamp;
+-- CREATE INDEX BraceletDailyHeartRateBloodPressureMacIdx ON BraceletDailyHeartRateBloodPressure(mac) TYPE btree;

@@ -24,13 +24,13 @@ public class PersonicleEventGenerator {
 
     private static int gran = eventCount / userCount;
 
-    private static final double minY = 30.0;
+    private static final double minY = 22.24;
 
-    private static final double maxY = 31.0;
+    private static final double maxY = 22.52;
 
-    private static final double minX = 117;
+    private static final double minX = 113.46;
 
-    private static final double maxX = 118;
+    private static final double maxX = 114.37;
 
     private static Random rand = new Random();
 
@@ -58,9 +58,9 @@ public class PersonicleEventGenerator {
         BufferedWriter bw = new BufferedWriter(new FileWriter("./events.adm"));
         for (UUID user : userSet) {
             double minx = minX + rand.nextDouble() * 0.5;
-            double maxx = minx + rand.nextDouble() * 0.25;
+            double maxx = maxX + rand.nextDouble() * 0.25;
             double miny = minY + rand.nextDouble() * 0.5;
-            double maxy = miny + rand.nextDouble() * 0.25;
+            double maxy = maxY + rand.nextDouble() * 0.25;
             double delx = (maxx - minx) / gran;
             double dely = (maxy - miny) / gran;
             int second = rand.nextInt(8 * 365 * 24 * 60 * 60);

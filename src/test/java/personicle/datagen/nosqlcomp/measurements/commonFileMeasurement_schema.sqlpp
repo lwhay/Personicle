@@ -1,0 +1,18 @@
+USE Personicle;
+
+DROP DATASET CommonFileMeasurement IF EXISTS;
+
+DROP TYPE CommonFileMeasurementType IF EXISTS;
+
+CREATE TYPE CommonFileMeasurementType AS OPEN {
+  deviceId: UUID,  --primary key string for user, will be changed to uuid later
+  timestamp: bigint, --primary key timestamp for observation
+  -- Attribute category includes: Photo, Video and Audio
+  file_category: string,
+  userName: string?,
+  filepath: string,
+  comments: string
+};
+
+CREATE DATASET CommonFileMeasurement(CommonFileMeasurementType) PRIMARY KEY deviceId, timestamp;
+-- CREATE INDEX SensoringPhotoUserIdIdx on SensoringPhoto(deviceId) type btree;

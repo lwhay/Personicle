@@ -5,7 +5,7 @@ DROP DATASET BraceletRawList IF EXISTS;
 DROP TYPE BraceletRawListType IF EXISTS;
 
 CREATE TYPE BraceletRawListType AS OPEN {
-  deviceId: string,
+  deviceId: UUID,
   timestamp: bigint,
   netId: int?,
   userName: string?,

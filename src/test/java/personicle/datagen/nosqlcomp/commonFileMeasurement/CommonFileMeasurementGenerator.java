@@ -1,7 +1,8 @@
-package personicle.datagen.nosqlcomp;
+package personicle.datagen.nosqlcomp.commonFileMeasurement;
 
 import asterix.recordV2.wrapper.DateTime;
 import asterix.recordV2.wrapper.Uuid;
+import personicle.datagen.nosqlcomp.GeneralMeasurement;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -11,16 +12,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class CommonFileMeasureGenerator {
-    private static int measureCount = 1000;//0000;
+public class CommonFileMeasurementGenerator {
+    private static int measureCount = 4000;//0000;
 
-    private static int deviceCount = 100;//0000;
+    private static int deviceCount = 400;//0000;
 
     private static int informationCount = 100;//00000;
 
     private static final int attributePerEvent = 5;
 
-    private static int gran = measureCount / deviceCount;
+    private static int gran = 10;
 
     private static Random rand = new Random();
 
@@ -45,12 +46,13 @@ public class CommonFileMeasureGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length >= 3) {
-            measureCount = Integer.parseInt(args[0]);
-            deviceCount = Integer.parseInt(args[1]);
-            informationCount = Integer.parseInt(args[2]);
-            gran = measureCount / deviceCount;
-        }
+        Generator(1000);
+    }
+
+    public static void Generator(int mc) throws IOException {
+        measureCount = mc*4;
+        deviceCount = measureCount / gran;
+
         genUsers();
         List<UUID> deviceSet = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
@@ -60,13 +62,15 @@ public class CommonFileMeasureGenerator {
         file_types.add("video");
         file_types.add("soundtrack");
         file_types.add("picture");
-        file_types.add("paper");
+        file_types.add("text");
         List<UUID> AttriSet = new ArrayList<>();
         for (int i = 0; i < informationCount; i++) {
             AttriSet.add(UUID.randomUUID());
         }
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter("./commonFileLog.adm"));
+        BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigCommonFileMeasurement.adm"));
+        BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/CommonFileMeasurement_alone.adm"));
+        BufferedWriter bw3 = new BufferedWriter(new FileWriter("./example/CommonFileMeasurement_general.adm"));
         for (UUID device : deviceSet) {
             String userName = users.get(rand.nextInt(users.size()));
             int second = rand.nextInt(2 * 365 * 24 * 60 * 60);
@@ -76,27 +80,35 @@ public class CommonFileMeasureGenerator {
             LocalDateTime begin = baseTime.plusSeconds(second);
 
             for (int i = 0; i < gran; i++) {
-                CommonFileMeasure commonFileMeasure = new CommonFileMeasure();
-                commonFileMeasure.setDeviceId(new Uuid(device));
-                commonFileMeasure.setUserName(userName);
+                CommonFileMeasurement BigLog = new CommonFileMeasurement();
+                BigLog.setDeviceId(new Uuid(device));
+                BigLog.setUserName(userName);
                 begin = begin.plusSeconds(2);
 //                System.out.println(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
-                commonFileMeasure.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
-                commonFileMeasure.setStartAt(new DateTime(begin));
-                commonFileMeasure.setEndAt(new DateTime(begin.plusSeconds(10)));
-                commonFileMeasure.setMeasureId(new Uuid(UUID.randomUUID()));
-                commonFileMeasure.setCategory("unknown");
-                commonFileMeasure.setFile_category(file_types.get(rand.nextInt(file_types.size())));
-                commonFileMeasure.setDescription(commonFileMeasure.getUserName() + " has " + commonFileMeasure.getFile_category() + " file ");
-                commonFileMeasure.setFilepath("---");
-                commonFileMeasure.setAttribute(new ArrayList<>());
+                BigLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
+                BigLog.setStartAt(new DateTime(begin));
+                BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
+                BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
+                BigLog.setCategory("unknown");
+                BigLog.setFile_category(file_types.get(rand.nextInt(file_types.size())));
+                BigLog.setDescription(BigLog.getUserName() + " has " + BigLog.getFile_category() + " file ");
+                BigLog.setComments(BigLog.getDescription());
+                BigLog.setFilepath("---");
+                List<Uuid> attribute = new ArrayList<>();
                 for (int j = 0; j < attributePerEvent; j++) {
-                    commonFileMeasure.getAttribute().add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
+                    attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
                 }
+                BigLog.setAttribute(attribute);
                 //System.out.println(event.toJSONString());
-                bw.write(commonFileMeasure.toJSONString() + "\n");
+                GeneralMeasurement gm = new GeneralMeasurement(BigLog);
+                CommonFileMeasurementAlone alone = new CommonFileMeasurementAlone(BigLog);
+                bw1.write(BigLog.toJSONString() + "\n");
+                bw2.write(alone.toJSONString() + "\n");
+                bw3.write(gm.toJSONString() + "\n");
             }
         }
-        bw.close();
+        bw1.close();
+        bw2.close();
+        bw3.close();
     }
 }

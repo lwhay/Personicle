@@ -1,0 +1,25 @@
+USE Personicle;
+
+DROP DATASET SensoringCP IF EXISTS;
+
+DROP TYPE SensoringCPType IF EXISTS;
+
+DROP TYPE Spatial3DPoint IF EXISTS;
+
+CREATE TYPE Spatial3DPoint AS {
+  x: double,
+  y: double,
+  z: double
+};
+
+CREATE TYPE SensoringCPType AS OPEN {
+  deviceId: UUID,  --primary key string for user, will be changed to uuid later
+  timestamp: bigint, --primary key timestamp for observation
+  userName: string?,
+  accelerometer: [Spatial3DPoint],
+  gyroscope: [Spatial3DPoint],
+  comments: string
+};
+
+CREATE DATASET SensoringCP(SensoringCPType) PRIMARY KEY deviceId, timestamp;
+-- CREATE INDEX SensoringCPUserIdIdx on SensoringCP(userId) type btree; -- unnecessary as deviceId is first part of PK.
