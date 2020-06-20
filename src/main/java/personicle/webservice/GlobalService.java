@@ -13,7 +13,8 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory;
 
-@WebService public class GlobalService {
+@WebService
+public class GlobalService {
     private static Logger LOGGER = Logger.getLogger(GlobalService.class);
 
     TimeBasedGenerator nbg = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
@@ -34,6 +35,10 @@ import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory
 
     public String getGeoCode(float x, float y) {
         return getGeoCode(new Point(x, y));
+    }
+
+    public String feedRecord(String record) {
+        return null;
     }
 
     public static void main(String[] args) throws SocketException {
