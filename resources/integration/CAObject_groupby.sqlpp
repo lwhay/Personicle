@@ -1,0 +1,5 @@
+use Personicle;
+
+select value0.mac, count(*) as cnt from CAObject
+group by value0.mac
+order by cnt;
