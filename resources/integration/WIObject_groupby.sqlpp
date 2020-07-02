@@ -1,0 +1,5 @@
+use Personicle;
+
+select user_id, count(*) as cnt from RECO
+group by user_id
+order by cnt;

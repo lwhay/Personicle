@@ -1,0 +1,19 @@
+use Personicle;
+
+drop dataset RECO if exists;
+drop type RECOType if exists;
+
+create type RECOType as open {
+    id: bigint,
+    user_id: string,
+    file_path: string,
+    start_timestamp: string,
+    end_timestamp: string,
+    strees: string,
+    valence: string,
+    arousal: string
+};
+
+create dataset RECO(RECOType) primary key id;
+
+create index RECONameIdx on RECO(user_id) type btree;
