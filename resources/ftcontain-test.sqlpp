@@ -1,0 +1,91 @@
+use Personicle;
+
+select * from GeneralMeasurement
+where attribute = "7a4884699044488e84f590387ca5229e 07ef77218382441fbabdbb3563681605"
+limit 10;
+
+let x= "121212 world", y = ["hello world"]
+select ftcontains(x, "world", {"mode":"any"});
+/*select `word-tokens`(x);*/
+
+use Personicle;
+select * from GeneralMeasurement
+where ftcontains(attribute, `word-tokens`("7a4884699044488e84f590387ca5229e 07ef77218382441fbabdbb3563681605"), {"mode":"any"})
+limit 10;
+
+use Personicle;
+select * from GeneralMeasurement
+where ftcontains(attribute, "7a4884699044488e84f590387ca5229e", {"mode":"any"})
+limit 10;
+
+use Personicle;
+select * from GeneralMeasurement
+where `word-tokens`(attribute) ~= `word-tokens`("7a4884699044488e84f590387ca5229e")
+limit 10;
+
+/* Mini test */
+use test;
+drop dataset testtable if exists;
+drop type testtype if exists;
+create type testtype as open {
+id: int,
+name: string?
+};
+create dataset testtable(testtype) primary key id;
+create index tnameidx on testtable(name) type fulltext;
+
+use test;
+insert into testtable (
+    [{
+        "id": 1, "name":"111"
+        }, {
+        "id":2, "name":"222"
+        }, {
+        "id":3, "name":"333"
+        }
+    ]
+);
+
+use test;
+select * from testtable
+where name = "111";
+
+use test;
+select * from testtable
+where ftcontains(name, "111", {"mode":"any"});
+
+use test;
+select * from testtable
+where `word-tokens`(name) ~= `word-tokens`("111");
+
+use test;
+select * from testtable
+where `word-tokens`(name) ~= `word-tokens`("7a4884699044488e84f590387ca5229e");
+
+/* reload for verification */
+USE Personicle;
+DROP DATASET GeneralMeasurement IF EXISTS;
+DROP TYPE GeneralMeasurementType IF EXISTS;
+CREATE TYPE GeneralMeasurementType AS OPEN {
+  measureId: string,  --primary key string for measurement, UUID
+  deviceId: string,
+  timestamp: bigint,
+  userName: string?,
+  beginAt: datetime?,
+  endAt: datetime?,
+  category: string,
+  attribute: string?,
+  activity: string?,
+  description: string?
+};
+CREATE DATASET GeneralMeasurement(GeneralMeasurementType) PRIMARY KEY measureId;
+CREATE INDEX GeneralMeasurementDeviceIdIdx ON GeneralMeasurement(deviceId, timestamp) type btree;
+CREATE INDEX GeneralMeasurementAttributeIdx ON GeneralMeasurement(attribute) type fulltext;
+
+USE Personicle;
+select * from GeneralMeasurement
+where ftcontains(attribute, `word-tokens`("7a4884699044488e84f590387ca5229e 07ef77218382441fbabdbb3563681605"), {"mode":"any"});
+
+USE Personicle;
+load dataset GeneralMeasurement using localfs
+(("path"="127.0.0.1:///f:/Work/Personicle/example/BigFoodLog.adm"),("format"="adm"));
