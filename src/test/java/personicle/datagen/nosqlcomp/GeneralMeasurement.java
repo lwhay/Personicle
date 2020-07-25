@@ -7,19 +7,20 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.List;
 
 public class GeneralMeasurement {
-    private String measureId;
+    private String measure;
     private String deviceId;
     private Long timestamp;
     private String userName;
     private DateTime startAt;  //startAt: datetime,    --start of event
-    private DateTime endAt;    //endAt: datetime,      --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
+    private DateTime endAt;
+            //endAt: datetime,      --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
     private String category;
     private String attribute;
     private String activity;            //name: string,
     private String description;
 
     public GeneralMeasurement(GeneralMeasurement gm) {
-        this.measureId = gm.getMeasureId();
+        this.measure = gm.getMeasure();
         this.deviceId = gm.getDeviceId();
         this.timestamp = gm.getTimestamp();
         this.userName = gm.getUserName();
@@ -75,13 +76,13 @@ public class GeneralMeasurement {
         this.endAt = endAt;
     }
 
-    public String getMeasureId() {
-        return measureId;
+    public String getMeasure() {
+        return measure;
     }
 
-    public void setMeasureId(Uuid uuid) {
-        this.measureId = uuid.getUuid().toString().replace("-", "");
-        this.measureId = this.measureId.trim();
+    public void setMeasure(Uuid uuid) {
+        this.measure = uuid.getUuid().toString().replace("-", "");
+        this.measure = this.measure.trim();
     }
 
     public String getCategory() {
@@ -114,13 +115,13 @@ public class GeneralMeasurement {
         this.attribute = this.attribute.trim();
     }
 
-//    public String getActivity() {
-//        return activity;
-//    }
-//
-//    public void setActivity(String activity) {
-//        this.activity = activity;
-//    }
+    //    public String getActivity() {
+    //        return activity;
+    //    }
+    //
+    //    public void setActivity(String activity) {
+    //        this.activity = activity;
+    //    }
 
     public String getDescription() {
         return description;

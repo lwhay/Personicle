@@ -7,6 +7,7 @@ DROP TYPE EmotionECGType IF EXISTS;
 CREATE TYPE EmotionECGType AS OPEN {
   deviceId: UUID,  --primary key string for user, will be changed to uuid later
   timestamp: bigint, --primary key timestamp for observation
+  measure: string,
   userName: string?,
   payload: [double],
   comments: string

@@ -84,11 +84,11 @@ public class CommonFileMeasurementGenerator {
                 BigLog.setDeviceId(new Uuid(device));
                 BigLog.setUserName(userName);
                 begin = begin.plusSeconds(2);
-//                System.out.println(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
+                // System.out.println(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 BigLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
-                BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
+                BigLog.setMeasure(new Uuid(UUID.randomUUID()));
                 BigLog.setCategory("commonFileMeasurement");
                 BigLog.setFile_category(file_types.get(rand.nextInt(file_types.size())));
                 BigLog.setDescription(BigLog.getUserName() + " has " + BigLog.getFile_category() + " file ");

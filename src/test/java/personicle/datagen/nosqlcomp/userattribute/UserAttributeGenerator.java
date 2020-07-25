@@ -79,7 +79,7 @@ public class UserAttributeGenerator {
         for (int i = 0; i < mc; i++) {
             AttriSet.add(UUID.randomUUID());
         }
-// GeneralMeasurement
+        // GeneralMeasurement
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/AttributeLog.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/AttributeAloneLog.adm"));
@@ -97,7 +97,7 @@ public class UserAttributeGenerator {
             LocalDateTime begin = baseTime.plusSeconds(second);
             // for (int i = 0; i < gran; i++) {
             UserAttribute AtLog = new UserAttribute();
-            AtLog.setAttributeId(attribute.toString().replace("-", "").trim());
+            AtLog.setAttribute(attribute.toString().replace("-", "").trim());
             AtLog.setUserId(userId);
             AtLog.setUserName(userName);
             begin = begin.plusSeconds(2);
@@ -132,13 +132,13 @@ public class UserAttributeGenerator {
             //userAttributeMap.get()
             if (userAttributeMap.get(AtLog.getUserId()) == null) {
                 List<String> a = new ArrayList();
-                a.add(AtLog.getAttributeId());
+                a.add(AtLog.getAttribute());
                 userAttributeMap.put(AtLog.getUserId(), a);
             } else {
-                userAttributeMap.get(AtLog.getUserId()).add(AtLog.getAttributeId());
+                userAttributeMap.get(AtLog.getUserId()).add(AtLog.getAttribute());
             }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("attributeId", AtLog.getAttributeId());
+            jsonObject.put("attributeId", AtLog.getAttribute());
             jsonObject.put("userName", AtLog.getUserName());
             jsonObject.put("userId", AtLog.getUserId());
             bw2.write(jsonObject + "\n");

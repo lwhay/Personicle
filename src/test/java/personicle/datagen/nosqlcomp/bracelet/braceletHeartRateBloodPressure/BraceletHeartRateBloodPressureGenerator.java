@@ -94,9 +94,11 @@ public class BraceletHeartRateBloodPressureGenerator {
                 BigLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
-                BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
+                BigLog.setMeasure(new Uuid(UUID.randomUUID()));
                 BigLog.setCategory("unknown");
-                BigLog.setDescription("userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: " + BigLog.getMeasureId());
+                BigLog.setDescription(
+                        "userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: "
+                                + BigLog.getMeasure());
                 List<Uuid> attribute = new ArrayList<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
                     attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));

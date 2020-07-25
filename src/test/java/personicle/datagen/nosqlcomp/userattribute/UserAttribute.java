@@ -7,7 +7,7 @@ import personicle.datagen.nosqlcomp.GeneralMeasurement;
 import java.util.List;
 
 public class UserAttribute extends GeneralMeasurement {
-    private String attributeId;
+    private String attribute;
     private String userId;
     private String events;
     private String measurements;
@@ -22,12 +22,12 @@ public class UserAttribute extends GeneralMeasurement {
         super();
     }
 
-    public String getAttributeId() {
-        return attributeId;
+    public String getAttribute() {
+        return attribute;
     }
 
-    public void setAttributeId(String attributeId) {
-        this.attributeId = attributeId;
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     public String getUserId() {

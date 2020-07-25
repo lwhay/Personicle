@@ -7,6 +7,7 @@ DROP TYPE FoodLogType IF EXISTS;
 CREATE TYPE FoodLogType AS OPEN {
   deviceId: UUID,  --primary key string for user, will be changed to uuid later
   timestamp: bigint, --primary key timestamp for observation
+  measure: string,
   userName: string?,
   foodName: string,
   weight: double,

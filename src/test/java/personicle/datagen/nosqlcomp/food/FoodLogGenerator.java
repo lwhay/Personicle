@@ -108,7 +108,7 @@ public class FoodLogGenerator {
             deviceSet.add(UUID.randomUUID());
         }
         HashMap<String, List<String>> userAttributeMap = UserAttributeGenerator.Generator(informationCount);
-// GeneralMeasurement
+        // GeneralMeasurement
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigFoodLog.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/FoodLog_alone.adm"));
@@ -154,9 +154,10 @@ public class FoodLogGenerator {
                 BigLog.setLongitude(x);
                 BigLog.setLatitude(y);
                 BigLog.setPreference_star(randomnum.nextInt(10));
-                BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
+                BigLog.setMeasure(new Uuid(UUID.randomUUID()));
                 BigLog.setCategory("foodlog");
-                BigLog.setDescription(BigLog.getUserName() + " ate " + BigLog.getWeight() + "g " + BigLog.getFoodName());
+                BigLog.setDescription(
+                        BigLog.getUserName() + " ate " + BigLog.getWeight() + "g " + BigLog.getFoodName());
                 BigLog.setComments(BigLog.getDescription());
                 Set<String> attribute = new HashSet<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
@@ -168,7 +169,7 @@ public class FoodLogGenerator {
                 for (String a : alist) {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("attributeId", a);
-                    jsonObject.put("measureId", BigLog.getMeasureId());
+                    jsonObject.put("measureId", BigLog.getMeasure());
                     bw4.write(jsonObject + "\n");
                 }
                 BigLog.setFoodAttribute(alist);

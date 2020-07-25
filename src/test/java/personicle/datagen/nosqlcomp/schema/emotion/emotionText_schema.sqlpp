@@ -7,6 +7,7 @@ DROP TYPE EmotionTextType IF EXISTS;
 CREATE TYPE EmotionTextType AS OPEN {
   deviceId: UUID, --primary key string for user, will be changed to uuid later
   timestamp: bigint, --primary key timestamp for observation
+  measure: string,
   userName: string?,
   message: string,
   comments: string

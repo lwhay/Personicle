@@ -73,7 +73,7 @@ public class EmotionECGGenerator {
         for (int i = 0; i < informationCount; i++) {
             AttriSet.add(UUID.randomUUID());
         }
-// GeneralMeasurement
+        // GeneralMeasurement
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigEmotionECG.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/EmotionECG_alone.adm"));
@@ -94,9 +94,11 @@ public class EmotionECGGenerator {
                 BigLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
-                BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
+                BigLog.setMeasure(new Uuid(UUID.randomUUID()));
                 BigLog.setCategory("emotionECG");
-                BigLog.setDescription("userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: " + BigLog.getMeasureId());
+                BigLog.setDescription(
+                        "userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: "
+                                + BigLog.getMeasure());
                 List<Uuid> attribute = new ArrayList<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
                     attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
@@ -105,7 +107,7 @@ public class EmotionECGGenerator {
 
                 // unique
                 BigLog.setComments("deviceId: " + BigLog.getDeviceId() + ",timeStamp: " + BigLog.getTimestamp());
-                BigLog.setPayload(new Double[]{1.0, 2.0});
+                BigLog.setPayload(new Double[] { 1.0, 2.0 });
 
                 //System.out.println(event.toJSONString());
                 GeneralMeasurement gm = new GeneralMeasurement(BigLog);

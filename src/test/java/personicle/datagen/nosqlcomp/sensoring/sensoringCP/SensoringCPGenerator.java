@@ -94,9 +94,11 @@ public class SensoringCPGenerator {
                 BigLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
-                BigLog.setMeasureId(new Uuid(UUID.randomUUID()));
+                BigLog.setMeasure(new Uuid(UUID.randomUUID()));
                 BigLog.setCategory("sensoringCP");
-                BigLog.setDescription("userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: " + BigLog.getMeasureId());
+                BigLog.setDescription(
+                        "userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: "
+                                + BigLog.getMeasure());
                 List<Uuid> attribute = new ArrayList<>();
                 for (int j = 0; j < attributesPerMeasurement; j++) {
                     attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
@@ -109,8 +111,8 @@ public class SensoringCPGenerator {
                 Spatial3DPoint p3 = new Spatial3DPoint(3.0, 3.0, 3.0);
                 Spatial3DPoint p4 = new Spatial3DPoint(4.0, 4.0, 4.0);
                 BigLog.setComments("deviceId: " + BigLog.getDeviceId() + ",timeStamp: " + BigLog.getTimestamp());
-                BigLog.setAccelerometer(new Spatial3DPoint[]{p1, p2});
-                BigLog.setGyroscope(new Spatial3DPoint[]{p3, p4});
+                BigLog.setAccelerometer(new Spatial3DPoint[] { p1, p2 });
+                BigLog.setGyroscope(new Spatial3DPoint[] { p3, p4 });
 
                 //System.out.println(event.toJSONString());
                 GeneralMeasurement gm = new GeneralMeasurement(BigLog);

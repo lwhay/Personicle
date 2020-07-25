@@ -7,6 +7,7 @@ DROP TYPE CommonFileMeasurementType IF EXISTS;
 CREATE TYPE CommonFileMeasurementType AS OPEN {
   deviceId: UUID,  --primary key string for user, will be changed to uuid later
   timestamp: bigint, --primary key timestamp for observation
+  measure: string,
   -- Attribute category includes: Photo, Video and Audio
   file_category: string,
   userName: string?,
