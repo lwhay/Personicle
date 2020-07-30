@@ -1,0 +1,31 @@
+use Personicle;
+
+select `date` as d, count(*) as c from HCObject as hc
+group by hc.date
+order by hc.date;
+
+use Personicle;
+select `date` as d, avg(hc.temperature) as t from HCObject as hc
+group by hc.date
+order by hc.date;
+
+use Personicle;
+select `date` as d, count(*) as c,
+       avg(hc.temperature) as t,
+       avg(hc.surfaceTemperature) as s,
+       avg(to_double(hc.heartbeat)) as hb,
+       avg(hc.lightSleepTime) as ls,
+       avg(hc.sleepTime) as sl
+from HCObject as hc
+group by hc.date
+order by hc.date;
+
+use Personicle;
+select `studentId` as d, count(*) as c,
+       avg(hc.temperature) as t,
+       avg(hc.surfaceTemperature) as s,
+       avg(to_double(hc.heartbeat)) as hb,
+       avg(hc.lightSleepTime) as ls,
+       avg(hc.sleepTime) as sl
+from HCObject as hc
+group by hc.studentId;
