@@ -29,3 +29,119 @@ select `studentId` as d, count(*) as c,
        avg(hc.sleepTime) as sl
 from HCObject as hc
 group by hc.studentId;
+
+use Personicle;
+select t,  avg(data) as a, count(id) as c from HCSignal h
+where h.`type` = 'step'
+group by tobigint(h.createTimestampMils / 350000000) as t
+order by t;
+
+use Personicle;
+with stat as (
+select t,  max(h.`data`) as a, count(id) as c, s as s from HCSignal h
+where h.`type` = 'step'
+group by `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as t, h.studentId as s
+order by t, s
+)
+select t as t, avg(a) as step, count(s) as s from stat
+group by t
+order by t;
+
+-- choose "2020-07-06" for verification
+use Personicle;
+select count(distinct h.studentId)
+from HCSignal h
+where `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) = date("2020-07-06") and h.`type`='step';
+
+-- the following is wrong as the steps in each day are accumulated.
+use Personicle;
+select t,  avg(data) as step, count(id) as c from HCSignal h
+where h.`type` = 'step'
+group by `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as t
+order by t;
+
+use Personicle;
+select t,  avg(data) as a, count(id) as c from HCSignal h
+where h.`type` = 'surfaceTemperature'
+group by `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as t
+order by t;
+
+-- absolutely wrong due to the timezone issues.
+use Personicle;
+select t,  avg(data) as a, count(id) as c from HCSignal h
+where h.`type` = 'surfaceTemperature'
+group by `get-date-from-datetime`(`datetime`(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'))) as t
+order by t;
+
+use Personicle;
+with hourseries as (
+use Personicle;
+select d as d, hr as hr, max(h.`data`) as a, s as s, count(*) as c from HCSignal h
+where h.`type` = 'step' and studentId="W1_7195"
+group by h.studentId as s, `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as d, `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr
+order by d, hr;
+
+use Personicle;
+select d as d, hr as hr, avg(h.`data`) as a, s as s, count(*) as c from HCSignal h
+where h.`type` = 'temperature' and studentId="W1_7195"
+group by h.studentId as s, `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as d, `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr
+order by d, hr;
+
+use Personicle;
+select d as d, hr as hr, avg(h.`data`) as a, s as s, count(*) as c from HCSignal h
+where h.`type` = 'surfaceTemperature' and studentId="W1_7195"
+group by h.studentId as s, `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as d, `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr
+order by d, hr;
+
+use Personicle;
+select d as d, hr as hr, avg(h.`data`) as a, s as s, count(*) as c from HCSignal h
+where h.`type` = 'heartbeat' and studentId="W1_7195"
+group by h.studentId as s, `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as d, `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr
+order by d, hr;
+)
+
+use Personicle;
+with stat as (
+select t,  max(h.`data`) as a, count(id) as c, s as s from HCSignal h
+where h.`type` = 'step'
+group by `get-hour`(`datetime`(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'))) as t, h.studentId as s
+order by t, s
+)
+select t as t, avg(a) as step, count(s) as s from stat
+group by t
+order by t;
+
+-- the following is wrong as the steps in each day are accumulated.
+use Personicle;
+select t,  sum(data)/count(distinct studentId) as a, count(id) as c from HCSignal h
+where h.`type` = 'step'
+group by `get-hour`(`datetime-from-unix-time-in-ms`(h.createTimestampMils)) as t
+order by t;
+
+use Personicle;
+select t,  avg(data) as a, count(id) as c from HCSignal h
+where h.`type` = 'surfaceTemperature'
+group by `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as t
+order by t;
+
+-- the fourth and fifth queries in the following part denote how to use timezone correctly.
+use Personicle;
+select `datetime-from-unix-time-in-ms`(1593558677765);
+
+select `get-hour`(`datetime-from-unix-time-in-ms`(1593558677765));
+
+select `adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(1593558677765),'+0800');
+
+with dt as (
+select `adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(1593558677765),'+0800')
+)
+--select dt;
+--select replace(dt[0].`$1`, "+08:00", "Z");
+select `get-hour`(`datetime`(replace(dt[0].`$1`, "+08:00", "Z")));
+
+select `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(1593558677765),'+0800'), "+08:00", "Z")));
+
+select `get-date-from-datetime`(`datetime`(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(1593558677765),'+0800')));
+select `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(1593558677765),'+0800'),  "+08:00", "Z")));
+
+select `get-hour`(`datetime`(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(1593558677765),'+0800')));
