@@ -46,14 +46,25 @@ public class CommonFileMeasurementGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        Generator(1000);
+        Generator(1000, null, null);
     }
 
-    public static void Generator(int mc) throws IOException {
+    public static void Generator(int mc, List<UUID> AttriSet, List<String> userList) throws IOException {
         measureCount = mc * 4;
         deviceCount = measureCount / gran;
 
-        genUsers();
+        if (AttriSet == null) {
+            genUsers();
+            AttriSet = new ArrayList<>();
+            for (int i = 0; i < informationCount; i++) {
+                AttriSet.add(UUID.randomUUID());
+            }
+        }
+        if (userList == null) {
+            genUsers();
+        } else {
+            users = userList;
+        }
         List<UUID> deviceSet = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
@@ -63,10 +74,6 @@ public class CommonFileMeasurementGenerator {
         file_types.add("soundtrack");
         file_types.add("picture");
         file_types.add("text");
-        List<UUID> AttriSet = new ArrayList<>();
-        for (int i = 0; i < informationCount; i++) {
-            AttriSet.add(UUID.randomUUID());
-        }
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigCommonFileMeasurement.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/CommonFileMeasurement_alone.adm"));

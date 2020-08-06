@@ -45,34 +45,45 @@ public class SensoringUSGenerator {
 
     public static List<String> users = new ArrayList<>();
 
-    private static void genFoodsAndUsers() throws IOException {
+    private static void genUsers() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("./resources/food_samples/raw.dat"));
         String line;
         while ((line = br.readLine()) != null) {
             String[] fields = line.split(" ");
             users.add(fields[1]);
-            foods.add(fields[3]);
         }
         br.close();
     }
 
     public static void main(String[] args) throws IOException {
-        Generator(1000);
+        Generator(1000, null, null);
     }
 
-    public static void Generator(int mc) throws IOException {
-        measureCount = mc;
+    public static void Generator(int mc, List<UUID> AttriSet, List<String> userList) throws IOException {
+        measureCount = mc * 4;
         deviceCount = measureCount / gran;
 
-        genFoodsAndUsers();
+        if (AttriSet == null) {
+            genUsers();
+            AttriSet = new ArrayList<>();
+            for (int i = 0; i < informationCount; i++) {
+                AttriSet.add(UUID.randomUUID());
+            }
+        }
+        if (userList == null) {
+            genUsers();
+        } else {
+            users = userList;
+        }
         List<UUID> deviceSet = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
         }
-        List<UUID> AttriSet = new ArrayList<>();
-        for (int i = 0; i < informationCount; i++) {
-            AttriSet.add(UUID.randomUUID());
-        }
+        List<String> file_types = new ArrayList<>();
+        file_types.add("video");
+        file_types.add("soundtrack");
+        file_types.add("picture");
+        file_types.add("text");
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigSensoringGPS.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/SensoringGPS_alone.adm"));
@@ -115,8 +126,8 @@ public class SensoringUSGenerator {
                 // unique
                 BigLog.setComments("deviceId: " + BigLog.getDeviceId() + ",timeStamp: " + BigLog.getTimestamp());
                 BigLog.setWeatherInfo(rand.nextInt(100));
-                BigLog.setLatitude(new Double[] { x, x + 0.1 });
-                BigLog.setLongitude(new Double[] { y, y + 0.1 });
+                BigLog.setLatitude(new Double[]{x, x + 0.1});
+                BigLog.setLongitude(new Double[]{y, y + 0.1});
                 //System.out.println(event.toJSONString());
                 GeneralMeasurement gm = new GeneralMeasurement(BigLog);
                 SensoringGPSAlone alone = new SensoringGPSAlone(BigLog);

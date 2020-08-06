@@ -1,6 +1,7 @@
 package personicle.datagen.nosqlcomp;
 
 import asterix.recordV2.wrapper.DateTime;
+import asterix.recordV2.wrapper.Interval;
 import asterix.recordV2.wrapper.Uuid;
 import com.alibaba.fastjson.JSONObject;
 
@@ -13,7 +14,8 @@ public class GeneralMeasurement {
     private String userName;
     private DateTime startAt;  //startAt: datetime,    --start of event
     private DateTime endAt;
-            //endAt: datetime,      --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
+    //endAt: datetime,      --end of event using `` because of a potential AsterixDB bugprivate DateTime startAt;
+    private Interval timerange;
     private String category;
     private String attribute;
     private String activity;            //name: string,
@@ -76,6 +78,14 @@ public class GeneralMeasurement {
         this.endAt = endAt;
     }
 
+    public Interval getTimerange() {
+        return timerange;
+    }
+
+    public void setTimerange(Interval timerange) {
+        this.timerange = timerange;
+    }
+
     public String getMeasure() {
         return measure;
     }
@@ -132,6 +142,10 @@ public class GeneralMeasurement {
     }
 
     public String toJSONString() {
+        if (endAt == null)
+            endAt = startAt;
+        if (timerange == null)
+            setTimerange(new Interval(startAt, endAt));
         return JSONObject.toJSONString(this);
     }
 }

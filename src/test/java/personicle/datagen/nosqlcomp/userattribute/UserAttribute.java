@@ -1,17 +1,13 @@
 package personicle.datagen.nosqlcomp.userattribute;
 
 import asterix.recordV2.wrapper.DateTime;
-import asterix.recordV2.wrapper.Uuid;
 import personicle.datagen.nosqlcomp.GeneralMeasurement;
-
-import java.util.List;
 
 public class UserAttribute extends GeneralMeasurement {
     private String attribute;
     private String userId;
     private String events;
     private String measurements;
-    private DateTime beginAt;
     private Double strength;
     private Double valence;
     private Double arousal;
@@ -92,13 +88,5 @@ public class UserAttribute extends GeneralMeasurement {
 
     public void setDegree(Double degree) {
         this.degree = degree;
-    }
-
-    public DateTime getBeginAt() {
-        return beginAt;
-    }
-
-    public void setBeginAt(DateTime beginAt) {
-        this.beginAt = beginAt;
     }
 }

@@ -1,17 +1,18 @@
 package personicle.datagen.nosqlcomp.bracelet.braceletSleep;
 
+import asterix.recordV2.wrapper.DateTime;
 import personicle.datagen.nosqlcomp.GeneralMeasurement;
 
 public class BraceletSleep extends GeneralMeasurement {
     private int netId;
     private String mac;
-    private String date;
-    private Long startTime=0L;
-    private Long endTime=0L;
+    private DateTime date;
+    private Long startTime = 0L;
+    private Long endTime = 0L;
     private int runMin;
     private int restlessMin;
     private int deepMin;
-    private String stepsInHour="[]";
+    private String stepsInHour = "[]";
     private String dateString;
     private String status;
     private Long createTime;
@@ -33,11 +34,11 @@ public class BraceletSleep extends GeneralMeasurement {
         this.mac = mac;
     }
 
-    public String getDate() {
+    public DateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(DateTime date) {
         this.date = date;
     }
 

@@ -45,35 +45,45 @@ public class EmotionECGGenerator {
 
     public static List<String> users = new ArrayList<>();
 
-    private static void genFoodsAndUsers() throws IOException {
+    private static void genUsers() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("./resources/food_samples/raw.dat"));
         String line;
         while ((line = br.readLine()) != null) {
             String[] fields = line.split(" ");
             users.add(fields[1]);
-            foods.add(fields[3]);
         }
         br.close();
     }
 
     public static void main(String[] args) throws IOException {
-        Generator(1000);
+        Generator(1000, null, null);
     }
 
-    public static void Generator(int mc) throws IOException {
-        measureCount = mc;
+    public static void Generator(int mc, List<UUID> AttriSet, List<String> userList) throws IOException {
+        measureCount = mc * 4;
         deviceCount = measureCount / gran;
 
-        genFoodsAndUsers();
+        if (AttriSet == null) {
+            genUsers();
+            AttriSet = new ArrayList<>();
+            for (int i = 0; i < informationCount; i++) {
+                AttriSet.add(UUID.randomUUID());
+            }
+        }
+        if (userList == null) {
+            genUsers();
+        } else {
+            users = userList;
+        }
         List<UUID> deviceSet = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
         }
-        List<UUID> AttriSet = new ArrayList<>();
-        for (int i = 0; i < informationCount; i++) {
-            AttriSet.add(UUID.randomUUID());
-        }
-        // GeneralMeasurement
+        List<String> file_types = new ArrayList<>();
+        file_types.add("video");
+        file_types.add("soundtrack");
+        file_types.add("picture");
+        file_types.add("text");
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigEmotionECG.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/EmotionECG_alone.adm"));
@@ -107,7 +117,7 @@ public class EmotionECGGenerator {
 
                 // unique
                 BigLog.setComments("deviceId: " + BigLog.getDeviceId() + ",timeStamp: " + BigLog.getTimestamp());
-                BigLog.setPayload(new Double[] { 1.0, 2.0 });
+                BigLog.setPayload(new Double[]{1.0, 2.0});
 
                 //System.out.println(event.toJSONString());
                 GeneralMeasurement gm = new GeneralMeasurement(BigLog);
