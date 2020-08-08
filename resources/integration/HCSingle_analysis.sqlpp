@@ -1,0 +1,174 @@
+-- find the most dominant cause in a given day
+use Personicle;
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    avg(h.`data`) as a,
+    --((select value  hg.h.`data` from hg limit 10)) as sa,
+    strict_var_samp((select value hg.h.`data` from hg)) as std,
+    strict_var_pop((select value hg.h.`data` from hg)) as stp
+from HCSignal h
+where h.`type` = 'heartbeat'
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr group as hg
+having
+    dt=`date`("2020-06-29")
+    and hr >=8 and hr <= 18
+order by
+    dt,
+    hr;
+
+-- find the most dominant cause of a student in a given day
+use Personicle;
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    avg(h.`data`) as a,
+    --((select value  hg.h.`data` from hg limit 10)) as sa,
+    strict_var_samp((select value hg.h.`data` from hg)) as std,
+    strict_var_pop((select value hg.h.`data` from hg)) as stp
+from HCSignal h
+where h.`type` = 'heartbeat'
+    and studentId="W1_FA62"
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr group as hg
+having
+    dt=`date`("2020-06-29")
+    and hr >=8 and hr <= 18
+order by
+    dt,
+    hr;
+
+-- 6-29 is monday, figure the class of a group of students
+-- find the most dominant cause of a student in a given day
+use Personicle;
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    avg(h.`data`) as a,
+    --((select value  hg.h.`data` from hg limit 10)) as sa,
+    strict_var_samp((select value hg.h.`data` from hg)) as std,
+    strict_var_pop((select value hg.h.`data` from hg)) as stp
+from HCSignal h
+where h.`type` = 'heartbeat'
+    and (studentId="W1_D229" or studentId="W1_6CB0" or studentId="W1_7CB2" or studentId="W1_8924" or studentId="W1_6F4B")
+    --and (studentId="W1_D229" or studentId="W1_6CB0" or studentId="W1_7CB2" or studentId="W1_8924" or studentId="W1_6F4B")
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr group as hg
+having
+    dt=`date`("2020-06-29")
+    and hr >=8 and hr <= 18
+order by
+    dt,
+    hr;
+
+-- student schema
+use Personicle;
+drop dataset LiHuStudent if exists;
+drop type LiHuStudentType if exists;
+create type LiHuStudentType as closed {
+    id: string,
+    age: int,
+    grade: string,
+    sex: string,
+    height: int,
+    weight: int,
+    lefteye: double,
+    righteye: double,
+    groupid: string
+};
+
+create dataset LiHuStudent(LiHuStudentType) primary key id;
+
+load dataset LiHuStudent using localfs (("path"="127.0.0.1://E:/student.txt"),(`format`=`delimited-text`),(`delimiter`=`|`));
+
+-- group-based aggregation
+use Personicle;
+with stat as (
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    max(h.`data`) as a
+from HCSignal h, LiHuStudent lhs
+where lhs.groupid = 'g1'
+    and lhs.id = h.studentId
+    and h.`type` = 'step'
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr,
+    h.studentId as sid
+)
+select dt1, hr1, sum(st.c) as cnt, avg(st.a)
+from stat st
+group by st.dt as dt1, st.hr as hr1 group as hg
+having
+    dt1=`date`("2020-06-29")
+    and hr1 >=8 and hr1 <= 18
+order by
+    dt1,
+    hr1;
+
+use Personicle;
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    avg(h.`data`) as a,
+    --((select value  hg.h.`data` from hg limit 10)) as sa,
+    strict_var_samp((select value hg.h.`data` from hg)) as std,
+    strict_var_pop((select value hg.h.`data` from hg)) as stp
+from HCSignal h, LiHuStudent lhs
+where lhs.groupid = 'g1'
+    and lhs.id = h.studentId
+    and h.`type` = 'heartbeat'
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr group as hg
+having
+    dt=`date`("2020-06-29")
+    and hr >=8 and hr <= 18
+order by
+    dt,
+    hr;
+
+
+--D229 group
+{ "dt": "2020-06-29", "hr": 8, "c": 879, "a": 80.51877133105802, "std": 995.1770390353503, "stp": 994.0448694801337 }
+{ "dt": "2020-06-29", "hr": 9, "c": 814, "a": 80.70761670761671, "std": 1195.5601633166211, "stp": 1194.0914161872395 }
+{ "dt": "2020-06-29", "hr": 10, "c": 826, "a": 79.44673123486683, "std": 906.7274620294958, "stp": 905.6297290246174 }
+{ "dt": "2020-06-29", "hr": 11, "c": 520, "a": 83.52115384615385, "std": 1037.4330776641473, "stp": 1035.4380140532546 }
+{ "dt": "2020-06-29", "hr": 12, "c": 675, "a": 67.61481481481482, "std": 390.60215408286615, "stp": 390.0234842249656 }
+{ "dt": "2020-06-29", "hr": 13, "c": 988, "a": 94.51113360323886, "std": 1021.63817378963, "stp": 1020.6041270550251 }
+{ "dt": "2020-06-29", "hr": 14, "c": 658, "a": 93.19908814589665, "std": 521.1733933833908, "stp": 520.3813365545407 }
+{ "dt": "2020-06-29", "hr": 15, "c": 38, "a": 107.36842105263158, "std": 220.56330014224753, "stp": 214.75900277008313 }
+
+
+-- generate histogram with any set of bins
+use Personicle;
+
+with bin as [
+{"tick": 1, "start": 10, "end": 30 },
+{"tick": 2, "start": 30, "end": 31 },
+{"tick": 3, "start": 31, "end": 35.29 },
+{"tick": 4, "start": 35.29, "end": 36.3 },
+{"tick": 5, "start": 36.3, "end": 36.4 },
+{"tick": 6, "start": 36.4, "end": 36.5 },
+{"tick": 7, "start": 36.5, "end": 36.6 },
+{"tick": 8, "start": 36.6, "end": 36.7 },
+{"tick": 9, "start": 36.7, "end": 36.8 },
+{"tick": 10, "start": 36.8, "end": 50 }
+]
+--select * from bin;
+select t as tk, count(h.id) as cnt
+from HCSignal h, bin  b
+where h.`type` = 'temperature'
+and h.`data` >= b.`start` and h.`data` < b.`end`
+group by b.tick as t
+order by t;
