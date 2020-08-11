@@ -37,8 +37,9 @@ group by
     `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
     `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr group as hg
 having
-    dt=`date`("2020-06-29")
-    and hr >=8 and hr <= 18
+    --dt=`date`("2020-06-29")
+    --and
+    hr >=8 and hr <= 18
 order by
     dt,
     hr;
@@ -88,6 +89,34 @@ create dataset LiHuStudent(LiHuStudentType) primary key id;
 
 load dataset LiHuStudent using localfs (("path"="127.0.0.1://E:/student.txt"),(`format`=`delimited-text`),(`delimiter`=`|`));
 
+-- single-person aggregation
+use Personicle;
+with stat as (
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    max(h.`data`) as a
+from HCSignal h
+where
+    h.studentId="W1_B4EC"
+    and h.`type` = 'step'
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr,
+    h.studentId as sid
+)
+select dt1, hr1, sum(st.c) as cnt, avg(st.a)
+from stat st
+group by st.dt as dt1, st.hr as hr1 group as hg
+having
+    --dt1=`date`("2020-06-29")
+    --and
+    hr1 >=8 and hr1 <= 18
+order by
+    dt1,
+    hr1;
+
 -- group-based aggregation
 use Personicle;
 with stat as (
@@ -109,8 +138,9 @@ select dt1, hr1, sum(st.c) as cnt, avg(st.a)
 from stat st
 group by st.dt as dt1, st.hr as hr1 group as hg
 having
-    dt1=`date`("2020-06-29")
-    and hr1 >=8 and hr1 <= 18
+    --dt1=`date`("2020-06-29")
+    --and
+    hr1 >=8 and hr1 <= 18
 order by
     dt1,
     hr1;
