@@ -67,6 +67,7 @@ public class UserAttributeGenerator {
         //genUsers();
     }
 
+    // Suppose userName is the primary key
     public static HashMap<String, List<String>> Generator(int mc) throws IOException {
         HashMap<String, List<String>> userAttributeMap = new HashMap<>();
 
@@ -113,7 +114,6 @@ public class UserAttributeGenerator {
             } else {
                 AtLog.setCategory("others");
             }
-
             if (j % 2 == 0) {
                 AtLog.setStrength(randompos.nextDouble() * 1000);
                 AtLog.setArousal(randompos.nextDouble() * 500);
@@ -128,12 +128,15 @@ public class UserAttributeGenerator {
             bw1.write(AtLog.toJSONString() + "\n");
             //userAttributeMap.put(j, AtLog.getAttributeId());
             //userAttributeMap.get()
-            if (userAttributeMap.get(AtLog.getUserId()) == null) {
+            //if (userAttributeMap.get(AtLog.getUserId()) == null) {
+            if (userAttributeMap.get(AtLog.getUserName()) == null) {
                 List<String> a = new ArrayList();
                 a.add(AtLog.getAttribute());
-                userAttributeMap.put(AtLog.getUserId(), a);
+                //userAttributeMap.put(AtLog.getUserId(), a);
+                userAttributeMap.put(AtLog.getUserName(), a);
             } else {
-                userAttributeMap.get(AtLog.getUserId()).add(AtLog.getAttribute());
+                userAttributeMap.get(AtLog.getUserName()).add(AtLog.getAttribute());
+                //userAttributeMap.get(AtLog.getUserId()).add(AtLog.getAttribute());
             }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("attributeId", AtLog.getAttribute());

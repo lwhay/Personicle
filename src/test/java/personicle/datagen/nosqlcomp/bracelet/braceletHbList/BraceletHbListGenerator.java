@@ -3,16 +3,11 @@ package personicle.datagen.nosqlcomp.bracelet.braceletHbList;
 import asterix.recordV2.wrapper.DateTime;
 import asterix.recordV2.wrapper.Uuid;
 import personicle.datagen.nosqlcomp.GeneralMeasurement;
-import personicle.datagen.nosqlcomp.bracelet.braceletECGList.BraceletECGList;
-import personicle.datagen.nosqlcomp.bracelet.braceletECGList.BraceletECGListAlone;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class BraceletHbListGenerator {
     private static int measureCount = 1000;//0000;
@@ -45,6 +40,8 @@ public class BraceletHbListGenerator {
 
     public static List<String> users = new ArrayList<>();
 
+    public static Map<String, List<String>> userAtts = null;
+
     private static void genUsers() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("./resources/food_samples/raw.dat"));
         String line;
@@ -56,10 +53,11 @@ public class BraceletHbListGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        Generator(1000, null, null);
+        Generator(1000, null, null, null);
     }
 
-    public static void Generator(int mc, List<UUID> AttriSet, List<String> userList) throws IOException {
+    public static void Generator(int mc, List<UUID> AttriSet, List<String> userList, Map<String, List<String>> userMap)
+            throws IOException {
         measureCount = mc * 4;
         deviceCount = measureCount / gran;
 
@@ -74,6 +72,9 @@ public class BraceletHbListGenerator {
             genUsers();
         } else {
             users = userList;
+        }
+        if (userMap != null) {
+            userAtts = userMap;
         }
         List<UUID> deviceSet = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
@@ -110,8 +111,31 @@ public class BraceletHbListGenerator {
                         "userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: "
                                 + BigLog.getMeasure());
                 List<Uuid> attribute = new ArrayList<>();
-                for (int j = 0; j < attributesPerMeasurement; j++) {
-                    attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
+                if (userAtts != null) {
+                    List<String> attri = userAtts.get(userName);
+                    Set<String> cont = new HashSet<>();
+                    for (int j = 0; j < attributesPerMeasurement; j++) {
+                        String att = attri.get(rand.nextInt(attri.size()));
+                        if (!cont.contains(att)) {
+                            String tmp = "";
+                            tmp += att.substring(0, 8);
+                            tmp += "-";
+                            tmp += att.substring(8, 12);
+                            tmp += "-";
+                            tmp += att.substring(12, 16);
+                            tmp += "-";
+                            tmp += att.substring(16, 20);
+                            tmp += "-";
+                            tmp += att.substring(20, 32);
+                            UUID uuid = UUID.fromString(tmp);
+                            attribute.add(new Uuid(uuid));
+                            cont.add(att);
+                        }
+                    }
+                } else {
+                    for (int j = 0; j < attributesPerMeasurement; j++) {
+                        attribute.add(new Uuid(AttriSet.get(rand.nextInt(AttriSet.size()))));
+                    }
                 }
                 BigLog.setAttribute(attribute);
 
