@@ -105,7 +105,7 @@ public class Total_Generator {
         }).start();
         CommonFileMeasurementGenerator.Generator(mc, al, ul, userAttributeMap);
         System.out.println("完成1/10: Files");
-        FoodLogGenerator.Generator(mc);
+        FoodLogGenerator.Generator(mc, userAttributeMap);
         System.out.println("完成1/10: Food");
     }
 }

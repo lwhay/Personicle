@@ -93,12 +93,13 @@ public class FoodLogGenerator {
         if (args.length > 0)
             measureCount = Integer.parseInt(args[0]);
         informationCount = measureCount / 10;
-        Generator(measureCount);
+        Generator(measureCount, null);
     }
 
-    public static void Generator(int mc) throws IOException {
+    public static void Generator(int mc, Map<String, List<String>> userMap) throws IOException {
         measureCount = mc;
         deviceCount = measureCount / gran;
+        informationCount = measureCount / 10;
 
         genFoodsAndUsers();
         genUsers();
@@ -107,7 +108,11 @@ public class FoodLogGenerator {
         for (int i = 0; i < deviceCount; i++) {
             deviceSet.add(UUID.randomUUID());
         }
-        HashMap<String, List<String>> userAttributeMap = UserAttributeGenerator.Generator(informationCount);
+        Map<String, List<String>> userAttributeMap;
+        if (userMap == null)
+            userAttributeMap = UserAttributeGenerator.Generator(informationCount);
+        else
+            userAttributeMap = userMap;
         // GeneralMeasurement
 
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigFoodLog.adm"));
@@ -115,18 +120,27 @@ public class FoodLogGenerator {
         BufferedWriter bw3 = new BufferedWriter(new FileWriter("./example/FoodLog_general.adm"));
         BufferedWriter bw4 = new BufferedWriter(new FileWriter("./example/FoodAttribute.adm"));
         JSONArray jsonArray = new JSONArray();
+        int count = 0;
         for (UUID device : deviceSet) {
             int u = rand.nextInt(userIds.size());
             String userId = userIds.get(u);
             String userName = userNames.get(u);
             //String userId=userAtIds.get(rand.nextInt(userAtIds.size()));
             List<String> userAttributeSet = new ArrayList<>();
-            while (!userAttributeMap.containsKey(userId)) {
+            boolean found = true;
+            int round = 10;
+            while (!userAttributeMap.containsKey(userName)) {
                 u = rand.nextInt(userIds.size());
                 userId = userIds.get(u);
                 userName = userNames.get(u);
+                if (round-- == 0) {
+                    found = false;
+                    break;
+                }
             }
-            userAttributeSet = userAttributeMap.get(userId);
+            if (!found)
+                continue;
+            userAttributeSet = userAttributeMap.get(userName);
             double minx = minX + rand.nextDouble() * 0.5;
             double maxx = maxX + rand.nextDouble() * 0.25;
             double miny = minY + rand.nextDouble() * 0.5;
@@ -139,6 +153,7 @@ public class FoodLogGenerator {
             }
             LocalDateTime begin = baseTime.plusSeconds(second);
             for (int i = 0; i < gran; i++) {
+                count++;
                 FoodLog BigLog = new FoodLog();
                 double x = minx + i * delx;
                 double y = miny + i * dely;
@@ -181,6 +196,7 @@ public class FoodLogGenerator {
                 bw3.write(gm.toJSONString() + "\n");
             }
         }
+        System.out.println("\tGen: " + count);
         bw1.close();
         bw2.close();
         bw3.close();
