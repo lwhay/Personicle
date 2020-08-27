@@ -1,4 +1,4 @@
 use Personicle;
 
-load dataset HCObject using localfs (("path"="127.0.0.1:///E:/student.adm"),("format"="adm"));
+load dataset HCObject using localfs (("path"="127.0.0.1:///D:/student.adm"),("format"="adm"));
 load dataset HCSignal using localfs (("path"="127.0.0.1:///D:/hs_history.adm"),("format"="adm"));

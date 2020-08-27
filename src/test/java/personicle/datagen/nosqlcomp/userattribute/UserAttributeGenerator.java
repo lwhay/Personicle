@@ -1,9 +1,7 @@
 package personicle.datagen.nosqlcomp.userattribute;
 
 import asterix.recordV2.wrapper.DateTime;
-import asterix.recordV2.wrapper.Uuid;
 import com.alibaba.fastjson.JSONObject;
-import personicle.datagen.nosqlcomp.GeneralMeasurement;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -102,7 +100,7 @@ public class UserAttributeGenerator {
             AtLog.setUserName(userName);
             begin = begin.plusSeconds(2);
             AtLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
-            AtLog.setBeginAt(new DateTime(begin));
+            AtLog.setStartAt(new DateTime(begin));
             AtLog.setEndAt(new DateTime(begin.plusSeconds(10)));
             AtLog.setEvents("event");
             AtLog.setMeasurements("unknown");

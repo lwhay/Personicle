@@ -1,5 +1,6 @@
 package personicle.datagen.nosqlcomp.bracelet.braceletSleep;
 
+import asterix.recordV2.wrapper.DateTime;
 import asterix.recordV2.wrapper.Uuid;
 import com.alibaba.fastjson.JSONObject;
 
@@ -9,9 +10,9 @@ public class BraceletSleepAlone {
     private String userName;
     private int netId;
     private String mac;
-    private String date;
-    private Long startTime=0L;
-    private Long endTime=0L;
+    private DateTime date;
+    private Long startTime = 0L;
+    private Long endTime = 0L;
     private int runMin;
     private int restlessMin;
     private int deepMin;
@@ -84,11 +85,11 @@ public class BraceletSleepAlone {
         this.mac = mac;
     }
 
-    public String getDate() {
+    public DateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(DateTime date) {
         this.date = date;
     }
 
