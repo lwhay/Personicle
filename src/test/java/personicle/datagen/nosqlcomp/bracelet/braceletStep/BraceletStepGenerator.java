@@ -18,7 +18,9 @@ public class BraceletStepGenerator {
 
     private static final int attributesPerMeasurement = 5;
 
-    private static int gran = 10;
+    private static int gran = 2000;
+
+    private static int interval = 1200;
 
     private static final double minY = 22.24;
 
@@ -89,9 +91,10 @@ public class BraceletStepGenerator {
         BufferedWriter bw1 = new BufferedWriter(new FileWriter("./example/BigBraceletStep.adm"));
         BufferedWriter bw2 = new BufferedWriter(new FileWriter("./example/BraceletStep_alone.adm"));
         BufferedWriter bw3 = new BufferedWriter(new FileWriter("./example/BraceletStep_general.adm"));
+        int useridx = 0;
         for (UUID device : deviceSet) {
-            String userName = users.get(rand.nextInt(users.size()));
-            int second = rand.nextInt(2 * 365 * 24 * 60 * 60);
+            String userName = users.get(useridx++/*rand.nextInt(users.size())*/);
+            int second = rand.nextInt(/*2 * 365 * */24 * 60 * 60);
             if (second % 2 == 0) {
                 second++;
             }
@@ -101,12 +104,14 @@ public class BraceletStepGenerator {
                 // general
                 BigLog.setDeviceId(new Uuid(device));
                 BigLog.setUserName(userName);
-                begin = begin.plusSeconds(2);
+                begin = begin.plusSeconds(interval);
+                if (begin.getHour() < 8 || begin.getHour() > 18) continue;
                 BigLog.setTimestamp(begin.toInstant(ZoneOffset.of("+8")).toEpochMilli());
                 BigLog.setStartAt(new DateTime(begin));
                 BigLog.setEndAt(new DateTime(begin.plusSeconds(10)));
                 BigLog.setMeasure(new Uuid(UUID.randomUUID()));
                 BigLog.setCategory("step");
+                BigLog.setStep(rand.nextInt(500));
                 BigLog.setDescription(
                         "userName:" + BigLog.getUserName() + "deviceId: " + BigLog.getDeviceId() + ",measureId: "
                                 + BigLog.getMeasure());

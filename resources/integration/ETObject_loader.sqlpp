@@ -1,0 +1,4 @@
+use Personicle;
+
+load dataset ETObject using localfs (("path"="127.0.0.1:///D:/raw.adm"),("format"="adm"));
+load dataset ETEvent using localfs (("path"="127.0.0.1:///D:/event.adm"),("format"="adm"));

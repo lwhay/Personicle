@@ -54,7 +54,7 @@ public class Total_Generator {
 
                 try {
                     BraceletSleepGenerator.Generator(mc, al, ul, userAttributeMap);
-                    BraceletECGListGenerator.Generator(mc, al, ul, userAttributeMap);
+                    /*BraceletECGListGenerator.Generator(mc, al, ul, userAttributeMap);*/
                     BraceletHbListGenerator.Generator(mc, al, ul, userAttributeMap);
                     System.out.println("完成1/5: Braclet-A");
                 } catch (IOException e) {
@@ -66,8 +66,8 @@ public class Total_Generator {
         new Thread(new Runnable() {
             @Override public void run() {
                 try {
-                    BraceletHeartRateBloodPressureGenerator.Generator(mc, al, ul, userAttributeMap);
-                    BraceletRawListGenerator.Generator(mc, al, ul, userAttributeMap);
+                    /*BraceletHeartRateBloodPressureGenerator.Generator(mc, al, ul, userAttributeMap);
+                    BraceletRawListGenerator.Generator(mc, al, ul, userAttributeMap);*/
                     BraceletStepGenerator.Generator(mc, al, ul, userAttributeMap);
                     System.out.println("完成1/5: Bracelet-B");
                 } catch (IOException e) {
@@ -76,7 +76,7 @@ public class Total_Generator {
 
             }
         }).start();
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override public void run() {
                 try {
                     SensoringCPGenerator.Generator(mc, al, ul, userAttributeMap);
@@ -106,6 +106,6 @@ public class Total_Generator {
         CommonFileMeasurementGenerator.Generator(mc, al, ul, userAttributeMap);
         System.out.println("完成1/10: Files");
         FoodLogGenerator.Generator(mc, userAttributeMap);
-        System.out.println("完成1/10: Food");
+        System.out.println("完成1/10: Food");*/
     }
 }
