@@ -44,6 +44,29 @@ order by
     dt,
     hr;
 
+use Personicle;
+select
+    dt as dt,
+    hr as hr,
+    count(*) as c,
+    avg(h.`data`) as a,
+    --((select value  hg.h.`data` from hg limit 10)) as sa,
+    strict_var_samp((select value hg.h.`data` from hg)) as std,
+    strict_var_pop((select value hg.h.`data` from hg)) as stp
+from HCSignal h
+where h.`type` like '%SleepTime'
+    and studentId="W1_FA62"
+group by
+    `get-date-from-datetime`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as dt,
+    `get-hour`(`datetime`(replace(`adjust-datetime-for-timezone`(`datetime-from-unix-time-in-ms`(h.createTimestampMils),'+0800'), "+08:00", "Z"))) as hr group as hg
+having
+    --dt=`date`("2020-06-29")
+    --and
+    hr >=8 and hr <= 18
+order by
+    dt,
+    hr;
+
 -- 6-29 is monday, figure the class of a group of students
 -- find the most dominant cause of a student in a given day
 use Personicle;
