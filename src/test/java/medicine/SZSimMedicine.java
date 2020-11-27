@@ -26,15 +26,15 @@ public class SZSimMedicine {
         int columns = 0;
         while ((line = br.readLine()) != null) {
             String[] fields = line.split(",");
-            if (!mappingcode.containsKey(fields[0])) {
-                mappingcode.put(fields[0], (int) (Math.abs((fields[0].hashCode() % names.length) * rand.nextGaussian())) % names.length);
+            if (!mappingcode.containsKey(fields[1])) {
+                mappingcode.put(fields[1], (int) (fields[1].hashCode() % names.length));
             }
             line = "";
             System.out.print(fields.length + "\t");
             if (fields.length > columns) columns = fields.length;
             for (int i = 0; i < fields.length; i++) {
                 if (i == 0)
-                    line += names[mappingcode.get(fields[i])];
+                    line += names[mappingcode.get(fields[1])];
                 else
                     line += fields[i];
                 line += ",";
@@ -42,7 +42,7 @@ public class SZSimMedicine {
                     while (i++ < 287) line += ",";
                     double year = rand.nextGaussian();
                     while (year < 0) year = rand.nextGaussian();
-                    line += Math.abs(2020 - ((int) (Math.abs(year * 10)) % 20));
+                    line += Math.abs(2020 - ((int) (Math.abs(year * 5)) % 10));
                     count++;
                     line += "\n";
                 }

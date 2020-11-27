@@ -1,0 +1,15 @@
+use Personicle;
+select xiangzhenjiedao, datayy, count(*) as cnt from SZSimMedicine
+group by xiangzhenjiedao, datayy
+order by xiangzhenjiedao, datayy;
+
+use Personicle;
+select *
+from SZSimMedicine;
+
+use Personicle;
+select xiangzhenjiedao, datayy, avg(`nianling`) as age, avg(`leijijieyan1nian`) jieyan1, avg(`leijijieyan2yue`) as jieyan2, avg(leijijieyan3zhou) as jieyan3, avg(`leijijieyan4ri`) as jieyan4, avg(`shousuoya`) high, avg(`shuzhangya`) as low, avg(`tizhongkg`) as weight, avg(`shengaocm`) as height, count(*) as cnt
+from SZSimMedicine
+group by xiangzhenjiedao, datayy
+group as dg
+order by xiangzhenjiedao, datayy;
