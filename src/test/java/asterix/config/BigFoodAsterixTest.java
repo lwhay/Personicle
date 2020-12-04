@@ -20,6 +20,6 @@ public class BigFoodAsterixTest {
             String ret = conn.handleRequest(conf, AsterixConf.OpType.QUERY);
             count += ((JSONArray) (JSONObject.parseObject(ret).get("results"))).size();
         }
-        System.out.println(count + " " + (System.currentTimeMillis()));
+        System.out.println(count + " " + queries.size() + " " + (System.currentTimeMillis() - begin));
     }
 }

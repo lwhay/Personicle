@@ -25,7 +25,7 @@ import static com.mongodb.client.model.Filters.gt;
 import static com.mongodb.client.model.Filters.lt;
 import static com.mongodb.client.model.Filters.eq;
 
-public class BigFoodTest {
+public class BigFoodMongoTest {
     private static void filterQuery() {
         try (MongoClient mongoClient = MongoClients.create("mongodb://172.16.2.225:27017")) {
 
@@ -90,7 +90,7 @@ public class BigFoodTest {
                 List<Document> docs = new ArrayList<Document>();
                 fit.into(docs);
                 count += docs.size();
-                System.out.println(docs.size());
+                // System.out.println(docs.size());
             }
             System.out.println(count + " " + (System.currentTimeMillis() - begin));
         }
