@@ -27,9 +27,9 @@ public class BigFoodAsterixTest {
         }
     }
 
-    private static void batchQueray(int batch_size) {
+    private static void batchQueray(int batch_size, String path) {
         try {
-            List<JSONObject> queries = JSONQuery.getQuery();
+            List<JSONObject> queries = JSONQuery.getQuery(path);
             AsterixConf conf = new AsterixConf("http://172.16.2.225:19002");
             AsterixConn conn = new AsterixConn();
             conf.setDataverse("PersonicleServer");
@@ -57,7 +57,9 @@ public class BigFoodAsterixTest {
     public static void main(String[] args) throws Exception {
         // rrQuery();
         if (true) {
-            batchQueray(Integer.parseInt(args[0]));
+            String path = "./resources/food_samples/foodlogquery.json";
+            if (args.length > 1) path = args[1];
+            batchQueray(Integer.parseInt(args[0]), path);
         }
     }
 }
