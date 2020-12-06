@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import personicle.query.JSONQuery;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.List;
 
 public class BigFoodAsterixTest {
@@ -54,13 +56,46 @@ public class BigFoodAsterixTest {
         }
     }
 
+    private static void batchKeyQueray(int batch_size, String path) {
+        try {
+            AsterixConf conf = new AsterixConf("http://172.16.2.209:19002");
+            AsterixConn conn = new AsterixConn();
+            conf.setDataverse("PersonicleServer");
+            int count = 0, tick = 0;
+            String q = "SELECT * FROM FoodLog WHERE `logId` in [";
+            long begin = System.currentTimeMillis();
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(":");
+                if (fields.length < 2)
+                    continue;
+                q += "uuid(" + fields[1].trim() + ")";
+                if (++tick % batch_size == 0) {
+                    q += "];";
+                    conf.setBody(q);
+                    String ret = conn.handleRequest(conf, AsterixConf.OpType.QUERY);
+                    count += ((JSONArray) (JSONObject.parseObject(ret).get("results"))).size();
+                    q = "SELECT * FROM FoodLog WHERE `logId` in [";
+                    System.out.println(count);
+                } else {
+                    q += ",";
+                }
+            }
+            System.out.println(count + " " + tick + " " + (System.currentTimeMillis() - begin));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         // rrQuery();
         if (true) {
-            String path = "./resources/food_samples/foodlogquery.json";
+            /*String path = "./resources/food_samples/foodlogquery.json";
             if (args.length > 1)
                 path = args[1];
-            batchQueray(Integer.parseInt(args[0]), path);
+            batchQueray(Integer.parseInt(args[0]), path);*/
+            batchKeyQueray(Integer.parseInt(args[0]), args[1]);
         }
     }
 }
