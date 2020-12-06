@@ -56,13 +56,13 @@ public class BigFoodAsterixTest {
         }
     }
 
-    private static void batchKeyQueray(int batch_size, String path) {
+    private static void simpleKeyQueray(int batch_size, String path) {
         try {
             AsterixConf conf = new AsterixConf("http://172.16.2.209:19002");
             AsterixConn conn = new AsterixConn();
             conf.setDataverse("PersonicleServer");
             int count = 0, tick = 0;
-            String q = "SELECT * FROM FoodLog WHERE `logId` in [";
+            String q = "SELECT * FROM FoodLog WHERE `logId` = ";
             long begin = System.currentTimeMillis();
             BufferedReader br = new BufferedReader(new FileReader(path));
             String line;
@@ -71,16 +71,12 @@ public class BigFoodAsterixTest {
                 if (fields.length < 2)
                     continue;
                 q += "uuid(" + fields[1].trim() + ")";
-                if (++tick % batch_size == 0) {
-                    q += "];";
-                    conf.setBody(q);
-                    String ret = conn.handleRequest(conf, AsterixConf.OpType.QUERY);
-                    count += ((JSONArray) (JSONObject.parseObject(ret).get("results"))).size();
-                    q = "SELECT * FROM FoodLog WHERE `logId` in [";
-                    System.out.println(count);
-                } else {
-                    q += ",";
-                }
+                q += ";";
+                conf.setBody(q);
+                String ret = conn.handleRequest(conf, AsterixConf.OpType.QUERY);
+                count += ((JSONArray) (JSONObject.parseObject(ret).get("results"))).size();
+                q = "SELECT * FROM FoodLog WHERE `logId` = ";
+                tick++;
             }
             System.out.println(count + " " + tick + " " + (System.currentTimeMillis() - begin));
         } catch (Exception e) {
@@ -95,7 +91,7 @@ public class BigFoodAsterixTest {
             if (args.length > 1)
                 path = args[1];
             batchQueray(Integer.parseInt(args[0]), path);*/
-            batchKeyQueray(Integer.parseInt(args[0]), args[1]);
+            simpleKeyQueray(Integer.parseInt(args[0]), args[1]);
         }
     }
 }
