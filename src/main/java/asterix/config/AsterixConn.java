@@ -4,21 +4,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.asterix.common.config.GlobalConfig;
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.logging.log4j.Level;
 import com.alibaba.fastjson.JSONObject;
+
+import javax.xml.bind.ValidationEvent;
 
 /**
  * @author michael
@@ -67,10 +68,14 @@ public class AsterixConn {
     @SuppressWarnings("deprecation") private String processSyncAQL(AsterixConf conf, AsterixConf.OpType type,
             String reqStr) throws Exception {
         PostMethod post = new PostMethod(conf.getUrl(type));
-        post.setRequestEntity(new StringRequestEntity(reqStr));
+        // post.setRequestEntity(new StringRequestEntity(reqStr));
         // post.setRequestEntity(new MultipartRequestEntity(new Part[] { new StringPart("query", reqStr),
         // new StringPart("mode", "asynchronous")}, new HttpMethodParams()));
         post.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+        NameValuePair[] paramList = new NameValuePair[1];
+        paramList[0] = new NameValuePair("statement", reqStr);
+        // UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList,"utf-8");
+        post.setQueryString(paramList);
 
         int ret = HttpStatus.SC_OK;
         String result = "";
