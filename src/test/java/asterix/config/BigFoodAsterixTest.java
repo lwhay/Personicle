@@ -31,7 +31,7 @@ public class BigFoodAsterixTest {
 
     private static void batchQueray(int batch_size, String path) {
         try {
-            List<JSONObject> queries = JSONQuery.getQuery(path);
+            List<JSONObject> queries = JSONQuery.getFields(path); // JSONQuery.getQuery(path);
             AsterixConf conf = new AsterixConf("http://172.16.2.209:19002");
             AsterixConn conn = new AsterixConn();
             conf.setDataverse("PersonicleServer");
@@ -42,9 +42,11 @@ public class BigFoodAsterixTest {
                 q += "'" + query.get("userName") + "'";
                 if (++tick % batch_size == 0) {
                     q += "];";
+                    // System.out.println(q + "\t" + query.toJSONString());
                     conf.setBody(q);
                     String ret = conn.handleRequest(conf, AsterixConf.OpType.QUERY);
                     count += ((JSONArray) (JSONObject.parseObject(ret).get("results"))).size();
+                    // System.out.println(((JSONArray) (JSONObject.parseObject(ret).get("results"))).toJSONString());
                     q = "SELECT * FROM FoodLog WHERE `userName` in [";
                 } else {
                     q += ",";
@@ -87,11 +89,11 @@ public class BigFoodAsterixTest {
     public static void main(String[] args) throws Exception {
         // rrQuery();
         if (true) {
-            /*String path = "./resources/food_samples/foodlogquery.json";
+            String path = "./resources/food_samples/foodlogquery.json";
             if (args.length > 1)
                 path = args[1];
-            batchQueray(Integer.parseInt(args[0]), path);*/
-            simpleKeyQueray(Integer.parseInt(args[0]), args[1]);
+            batchQueray(Integer.parseInt(args[0]), path);
+            // simpleKeyQueray(Integer.parseInt(args[0]), args[1]);
         }
     }
 }
