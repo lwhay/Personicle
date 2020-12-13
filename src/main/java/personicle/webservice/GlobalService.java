@@ -1,5 +1,6 @@
 package personicle.webservice;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedGenerator;
@@ -15,7 +16,8 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory;
 
-@WebService public class GlobalService {
+@WebService
+public class GlobalService {
     private static Logger LOGGER = Logger.getLogger(GlobalService.class);
 
     TimeBasedGenerator nbg = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
@@ -33,7 +35,7 @@ import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory
     }
 
     private String getGeoCode(Point point) {
-        return null;
+        return String.valueOf(point.getLongitude() * 180 + point.getLatitude());
     }
 
     public String getGlobalDirectory() {
@@ -41,10 +43,16 @@ import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory
     }
 
     public String getGeoCode(float x, float y) {
-        return getGeoCode(new Point(x, y));
+        return getGeoCode(new Point(x % 180, y));
+    }
+
+    public String getGeoCodeDouble(double x, double y) {
+        System.out.println(x + "," + y);
+        return getGeoCode((float) x % 180, (float) y);
     }
 
     public String feedRecord(String record) {
+        System.out.println(record + "->" + ((JSONObject) JSONObject.parse(record)).toJSONString());
         return null;
     }
 
@@ -52,8 +60,13 @@ import personicle.webservice.directoryService.DirectoryPublisher.GlobalDirectory
         String ipAddress = IPAddressUtil.getEffectiveLocalIPAddress();
         if (ipAddress != null) {
             System.out.println(ipAddress);
-            String address = "http://" + ipAddress + ":10901/GlobalSerivce";
+            String address = "http://" + ipAddress + ":10901/GlobalService";
             Endpoint.publish(address, new GlobalService());
+
+            /*
+            http://localhost:10901/GlobalService/getGeoCodeDouble/arg0/10.0/arg1/1.0
+            http://localhost:10901/GlobalService/feedRecord/arg0/{id:123,userName:"Michael Jordan"}
+            */
         } else {
             LOGGER.error("IP not found!");
         }
