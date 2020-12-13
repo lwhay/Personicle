@@ -26,6 +26,7 @@ import javax.xml.bind.ValidationEvent;
  */
 public class AsterixConn {
     private HttpClient client = new HttpClient();
+    private PostMethod post = null;
 
     public AsterixConn(HostConfiguration hc, HttpClientParams params) {
         client.setHostConfiguration(hc);
@@ -67,15 +68,17 @@ public class AsterixConn {
 
     @SuppressWarnings("deprecation") private String processSyncAQL(AsterixConf conf, AsterixConf.OpType type,
             String reqStr) throws Exception {
-        PostMethod post = new PostMethod(conf.getUrl(type));
-        // post.setRequestEntity(new StringRequestEntity(reqStr));
-        // post.setRequestEntity(new MultipartRequestEntity(new Part[] { new StringPart("query", reqStr),
-        // new StringPart("mode", "asynchronous")}, new HttpMethodParams()));
-        post.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
-        NameValuePair[] paramList = new NameValuePair[1];
-        paramList[0] = new NameValuePair("statement", reqStr);
-        // UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList,"utf-8");
-        post.setQueryString(paramList);
+        if (post == null) {
+            post = new PostMethod(conf.getUrl(type));
+            // post.setRequestEntity(new StringRequestEntity(reqStr));
+            // post.setRequestEntity(new MultipartRequestEntity(new Part[] { new StringPart("query", reqStr),
+            // new StringPart("mode", "asynchronous")}, new HttpMethodParams()));
+            post.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+            NameValuePair[] paramList = new NameValuePair[1];
+            paramList[0] = new NameValuePair("statement", reqStr);
+            // UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList,"utf-8");
+            post.setQueryString(paramList);
+        }
 
         int ret = HttpStatus.SC_OK;
         String result = "";
@@ -109,11 +112,16 @@ public class AsterixConn {
             GlobalConfig.ASTERIX_LOGGER.log(Level.ERROR, errors[2]);
             return ("DDL operation failed: " + errors[0] + "\nSUMMARY: " + errors[1] + "\nSTACKTRACE: " + errors[2]);
         }
-        post.releaseConnection();
+        // post.releaseConnection();
         if (!"".equals(result))
             return result;
         else
             return "do successfully";
+    }
+
+    public void release() {
+        if (post != null)
+            post.releaseConnection();
     }
 
     /**

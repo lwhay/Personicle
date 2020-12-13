@@ -52,6 +52,7 @@ public class BigFoodAsterixTest {
                     q += ",";
                 }
             }
+            conn.release();
             System.out.println(count + " " + queries.size() + " " + (System.currentTimeMillis() - begin));
         } catch (Exception e) {
             e.printStackTrace();
