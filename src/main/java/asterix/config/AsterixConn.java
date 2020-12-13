@@ -91,6 +91,7 @@ public class AsterixConn {
                 }
                 result = sb.toString();
             }
+            is.close();
         } catch (HttpException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -108,6 +109,7 @@ public class AsterixConn {
             GlobalConfig.ASTERIX_LOGGER.log(Level.ERROR, errors[2]);
             return ("DDL operation failed: " + errors[0] + "\nSUMMARY: " + errors[1] + "\nSTACKTRACE: " + errors[2]);
         }
+        post.releaseConnection();
         if (!"".equals(result))
             return result;
         else
