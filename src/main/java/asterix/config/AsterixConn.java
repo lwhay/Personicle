@@ -74,11 +74,11 @@ public class AsterixConn {
             // post.setRequestEntity(new MultipartRequestEntity(new Part[] { new StringPart("query", reqStr),
             // new StringPart("mode", "asynchronous")}, new HttpMethodParams()));
             post.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
-            NameValuePair[] paramList = new NameValuePair[1];
-            paramList[0] = new NameValuePair("statement", reqStr);
-            // UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList,"utf-8");
-            post.setQueryString(paramList);
         }
+        NameValuePair[] paramList = new NameValuePair[1];
+        paramList[0] = new NameValuePair("statement", reqStr);
+        // UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList,"utf-8");
+        post.setQueryString(paramList);
 
         int ret = HttpStatus.SC_OK;
         String result = "";
