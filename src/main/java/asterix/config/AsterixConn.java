@@ -93,6 +93,7 @@ public class AsterixConn {
                     sb.append(line);
                 }
                 result = sb.toString();
+                in.close();
             }
             is.close();
         } catch (HttpException e) {
@@ -120,8 +121,9 @@ public class AsterixConn {
     }
 
     public void release() {
-        if (post != null)
+        if (post != null) {
             post.releaseConnection();
+        }
     }
 
     /**
